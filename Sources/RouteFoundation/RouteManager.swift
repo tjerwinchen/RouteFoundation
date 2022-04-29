@@ -23,7 +23,7 @@
 
 import UIKit
 
-public final class RouteManager: RouteRegister & RouteHandle {
+public final class RouteManager: RouteHandle {
   // MARK: Lifecycle
 
   private init() {}
@@ -31,7 +31,4 @@ public final class RouteManager: RouteRegister & RouteHandle {
   // MARK: Public
 
   public static let shared = RouteManager()
-
-  public internal(set) var viewControllerProviders: [String: Route.ViewControllerProvider] = [:]
-  public internal(set) var urlOpenHandlerProviders: [String: Route.URLOpenHandlerProvider] = [:]
 }

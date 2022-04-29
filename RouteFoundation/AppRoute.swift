@@ -34,7 +34,8 @@ enum AppRoute: String, Route {
   // MARK: Internal
 
   var viewControllerProvider: ViewControllerProvider {
-    { _, params, _ in
+    { arg in
+      let (_, params, _) = arg
       let viewController = RouteSampleViewController()
       viewController.title = params["title"]
       return viewController

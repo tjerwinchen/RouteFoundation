@@ -24,8 +24,16 @@
 import UIKit
 
 extension Route {
-  public typealias ViewControllerProvider = (_ url: URLConvertible, _ queryParameters: [String: String], _ context: Any?) -> UIViewController?
-  public typealias URLOpenHandlerProvider = (_ url: URLConvertible, _ queryParameters: [String: String]) -> Bool
+  /// (_ url: URLConvertible, queryParameters: [String: String], context: Any?)
+  public typealias ViewControllerProviderParameters = (URLConvertible, [String: String], Any?)
+
+  public typealias ViewControllerProvider = (ViewControllerProviderParameters) -> UIViewController?
+
+  /// (_ url: URLConvertible, queryParameters: [String: String])
+  public typealias URLOpenHandlerProviderParameters = (URLConvertible, [String: String])
+
+  public typealias URLOpenHandlerProvider = (URLOpenHandlerProviderParameters) -> Bool
+
   public typealias URLOpenHandler = () -> Bool
 }
 
@@ -69,7 +77,8 @@ extension Route {
   }
 
   public var urlOpenHandlerProvider: URLOpenHandlerProvider {
-    { _, queryParameters in
+    { arg in
+      let (_, queryParameters) = arg
       show(queryParameters: queryParameters, context: nil, from: nil)
       return true
     }

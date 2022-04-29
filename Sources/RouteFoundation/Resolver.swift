@@ -40,11 +40,32 @@ final class Resolver {
     factories.updateValue(factory, forKey: identifier)
   }
 
-  func factory<FactoryInput, FactoryOutput>(for identifier: String) -> ((FactoryInput) -> FactoryOutput)? {
+  func factory<FactoryInput, FactoryOutput>(for identifier: String, factoryInput: FactoryInput.Type, factoryOutput: FactoryOutput.Type) -> ((FactoryInput) -> FactoryOutput)? {
     factories[identifier] as? ((FactoryInput) -> FactoryOutput)
   }
 
-  func resolve<FactoryInput, FactoryOutput>(identifier: String, factoryOutput: FactoryOutput.Type, input: FactoryInput) -> FactoryOutput? {
-    factory(for: identifier)?(input)
+  func resolve<FactoryInput, FactoryOutput>(identifier: String, factoryInput: FactoryInput.Type, factoryOutput: FactoryOutput.Type, input: FactoryInput) throws -> FactoryOutput {
+    guard let factory = factory(for: identifier, factoryInput: FactoryInput.self, factoryOutput: FactoryOutput.self) else {
+      throw ResolverError.notFound(factoryKey: identifier)
+    }
+
+    return factory(input)
+  }
+}
+
+// MARK: - ResolverError
+
+enum ResolverError: Error {
+  case notFound(factoryKey: String)
+}
+
+// MARK: CustomStringConvertible
+
+extension ResolverError: CustomStringConvertible {
+  var description: String {
+    switch self {
+    case let .notFound(factoryKey):
+      return "The factory \(factoryKey) not found."
+    }
   }
 }

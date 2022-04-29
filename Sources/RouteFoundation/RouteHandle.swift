@@ -26,11 +26,11 @@ import UIKit
 // MARK: - RouteHandle
 
 public protocol RouteHandle: AnyObject {
-  /// All view controller providers
-  var viewControllerProviders: [String: Route.ViewControllerProvider] { get }
+  /// Register a pattern with a ViewController provider
+  func register(pattern: URLConvertible, viewControllerProvider: @escaping Route.ViewControllerProvider)
 
-  /// All url open hander providers
-  var urlOpenHandlerProviders: [String: Route.URLOpenHandlerProvider] { get }
+  /// Register a pattern with a URLOpenHandler provider
+  func register(pattern: URLConvertible, urlOpenHandlerProvider: @escaping Route.URLOpenHandlerProvider)
 
   /// view controller for a given url
   func viewController(for url: URLConvertible, context: Any?) -> UIViewController?
@@ -58,14 +58,44 @@ public protocol RouteHandle: AnyObject {
 // MARK: - Default Implementation
 
 extension RouteHandle {
-  public func viewController(for url: URLConvertible, context: Any? = nil) -> UIViewController? {
+  func identifier(from url: URLConvertible, type: Any.Type) -> String? {
     guard let urlPattern = url.urlValue?.path.trimmingCharacters(in: CharacterSet(charactersIn: "/")) else {
       return nil
     }
-    guard let provider = viewControllerProviders[urlPattern] else {
+
+    let tag = Int(bitPattern: ObjectIdentifier(type))
+
+    return "\(urlPattern)#\(tag)"
+  }
+
+  public func register(pattern: URLConvertible, viewControllerProvider: @escaping Route.ViewControllerProvider) {
+    guard let identifier = identifier(from: pattern, type: Route.ViewControllerProvider.self) else {
+      return
+    }
+
+    Resolver.shared.add(identifier: identifier, factory: viewControllerProvider)
+  }
+
+  public func register(pattern: URLConvertible, urlOpenHandlerProvider: @escaping Route.URLOpenHandlerProvider) {
+    guard let identifier = identifier(from: pattern, type: Route.URLOpenHandlerProvider.self) else {
+      return
+    }
+
+    Resolver.shared.add(identifier: identifier, factory: urlOpenHandlerProvider)
+  }
+
+  public func viewController(for url: URLConvertible, context: Any? = nil) -> UIViewController? {
+    guard let identifier = identifier(from: url, type: Route.ViewControllerProvider.self) else {
       return nil
     }
-    return provider(url, url.queryParameters, context)
+
+    let parameter: Route.ViewControllerProviderParameters = (url, url.queryParameters, context)
+
+    do {
+      return try Resolver.shared.resolve(identifier: identifier, factoryInput: Route.ViewControllerProviderParameters.self, factoryOutput: UIViewController?.self, input: parameter)
+    } catch {
+      return nil
+    }
   }
 
   @discardableResult
@@ -74,13 +104,19 @@ extension RouteHandle {
   }
 
   func handler(for url: URLConvertible) -> Route.URLOpenHandler? {
-    guard let urlPattern = url.urlValue?.path.trimmingCharacters(in: CharacterSet(charactersIn: "/")) else {
+    guard let identifier = identifier(from: url, type: Route.URLOpenHandlerProvider.self) else {
       return nil
     }
-    guard let handler = urlOpenHandlerProviders[urlPattern] else {
-      return nil
+
+    let parameter: Route.URLOpenHandlerProviderParameters = (url, url.queryParameters)
+
+    return {
+      do {
+        return try Resolver.shared.resolve(identifier: identifier, factoryInput: Route.URLOpenHandlerProviderParameters.self, factoryOutput: Bool.self, input: parameter)
+      } catch {
+        return false
+      }
     }
-    return { handler(url, url.queryParameters) }
   }
 
   public func show(for url: URLConvertible, context: Any? = nil, from sourceViewController: UIViewController? = nil) {
