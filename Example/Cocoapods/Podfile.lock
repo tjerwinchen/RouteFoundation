@@ -1,0 +1,16 @@
+PODS:
+  - RouteFoundation (0.0.1)
+
+DEPENDENCIES:
+  - RouteFoundation (from `../../`)
+
+EXTERNAL SOURCES:
+  RouteFoundation:
+    :path: "../../"
+
+SPEC CHECKSUMS:
+  RouteFoundation: 156e67d409fa8b4b0f658f4e81765f9ef6e976b4
+
+PODFILE CHECKSUM: 2b28e398b001d651fa712db11285b1f1f1d6d4dd
+
+COCOAPODS: 1.11.3
