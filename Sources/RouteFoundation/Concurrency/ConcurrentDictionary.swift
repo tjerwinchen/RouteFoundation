@@ -127,7 +127,6 @@ final class ConcurrentDictionary<Key: Hashable, Value> {
 
   // MARK: Private
 
-  // Initialization of lock, pthread_rwlock_t is a value type and must be declared as var in order to refer it later. Make sure not to copy it.
   private var concurrentLock = ConcurrentLock()
   private var unsafeDictionary: [Key: Value]
 }

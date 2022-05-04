@@ -125,7 +125,9 @@ extension RouteHandle {
     }
 
     let fromViewController = sourceViewController ?? UIApplication.sharedInstance?.topViewController
-    fromViewController?.show(destViewController, sender: fromViewController)
+    DispatchQueue.main.async {
+      fromViewController?.show(destViewController, sender: fromViewController)
+    }
   }
 
   public func showDetail(for url: URLConvertible, context: Any? = nil, from sourceViewController: UIViewController? = nil, wrapIn navigationControllerClass: UINavigationController.Type? = nil) {
@@ -143,7 +145,9 @@ extension RouteHandle {
       viewControllerToPresent = navigationControllerClass.init(rootViewController: destViewController)
     }
 
-    fromViewController.showDetailViewController(viewControllerToPresent, sender: fromViewController)
+    DispatchQueue.main.async {
+      fromViewController.showDetailViewController(viewControllerToPresent, sender: fromViewController)
+    }
   }
 
   public func push(for url: URLConvertible, context: Any? = nil, from navigationController: UINavigationController? = nil, animated: Bool = true) {
@@ -155,7 +159,9 @@ extension RouteHandle {
       return
     }
 
-    navigationController.pushViewController(destViewController, animated: animated)
+    DispatchQueue.main.async {
+      navigationController.pushViewController(destViewController, animated: animated)
+    }
   }
 
   public func present(for url: URLConvertible, context: Any? = nil,
@@ -178,6 +184,8 @@ extension RouteHandle {
       viewControllerToPresent = navigationControllerClass.init(rootViewController: destViewController)
     }
 
-    fromViewController.present(viewControllerToPresent, animated: animated, completion: completion)
+    DispatchQueue.main.async {
+      fromViewController.present(viewControllerToPresent, animated: animated, completion: completion)
+    }
   }
 }

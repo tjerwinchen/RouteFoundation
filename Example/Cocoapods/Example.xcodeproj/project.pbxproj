@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		03F7CFB89AD8396A54AB7749 /* AppRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3CF09A32766E1D2782664C /* AppRoute.swift */; };
-		2ED5CD23CBE3BD40543623D0 /* Pods_RouteFoundationExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B57694638E7BC2F8C9D82B8 /* Pods_RouteFoundationExample.framework */; };
+		6A01555ED1332A16E5A08B37 /* Pods_RouteFoundationExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6144B93005BED71B9F7209C5 /* Pods_RouteFoundationExample.framework */; };
 		8700C35230C4957536282902 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE4DC01E8954460364BD6C3 /* AppDelegate.swift */; };
 		8FF59A0E95631F7DE1BF61E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 211B2464C4C80CB295FB9B91 /* Assets.xcassets */; };
 		AC321D2D5E0568D4D7900C4B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E01B2C1B14EF4913CF4DA2B3 /* LaunchScreen.storyboard */; };
@@ -17,31 +17,39 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		19FAF4EE4DF4B35BB6F60D48 /* Pods-RouteFoundationExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RouteFoundationExample.debug.xcconfig"; path = "Target Support Files/Pods-RouteFoundationExample/Pods-RouteFoundationExample.debug.xcconfig"; sourceTree = "<group>"; };
 		1B3CF09A32766E1D2782664C /* AppRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRoute.swift; sourceTree = "<group>"; };
 		211B2464C4C80CB295FB9B91 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		3B57694638E7BC2F8C9D82B8 /* Pods_RouteFoundationExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RouteFoundationExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		56D57215D73C91EAED8869FB /* RouteFoundationExample.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = RouteFoundationExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6144B93005BED71B9F7209C5 /* Pods_RouteFoundationExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RouteFoundationExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		95850E28C309AFF9F9A0F4E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ABA820885D38A316415497A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AC936B92FF215957484CCD29 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		C36D0D6E8CA38DA0EBF490F8 /* Pods-RouteFoundationExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RouteFoundationExample.release.xcconfig"; path = "Target Support Files/Pods-RouteFoundationExample/Pods-RouteFoundationExample.release.xcconfig"; sourceTree = "<group>"; };
+		CF41488900499ECDD9F8A96F /* Pods-RouteFoundationExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RouteFoundationExample.release.xcconfig"; path = "Target Support Files/Pods-RouteFoundationExample/Pods-RouteFoundationExample.release.xcconfig"; sourceTree = "<group>"; };
 		D46E4E6D575E54546A1B133A /* RouteSampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSampleViewController.swift; sourceTree = "<group>"; };
 		DAE4DC01E8954460364BD6C3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		F928DA5E1E6A180CA19D4ADB /* Pods-RouteFoundationExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RouteFoundationExample.debug.xcconfig"; path = "Target Support Files/Pods-RouteFoundationExample/Pods-RouteFoundationExample.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		D6373FC94458BE58D9D744CB /* Frameworks */ = {
+		667F55B6142D9EC2C997EAC3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2ED5CD23CBE3BD40543623D0 /* Pods_RouteFoundationExample.framework in Frameworks */,
+				6A01555ED1332A16E5A08B37 /* Pods_RouteFoundationExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		22140398B007E2945F5A541E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6144B93005BED71B9F7209C5 /* Pods_RouteFoundationExample.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		3031F8ABC084F8D43CC56342 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -55,18 +63,18 @@
 			children = (
 				8162498C403207A315ECE5D7 /* RouteFoundation */,
 				3031F8ABC084F8D43CC56342 /* Products */,
-				7FCE217F118C73151414BE74 /* Pods */,
-				A52761FCD74215CB371E92A8 /* Frameworks */,
+				6444E738657914736FABEACD /* Pods */,
+				22140398B007E2945F5A541E /* Frameworks */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
 			tabWidth = 2;
 		};
-		7FCE217F118C73151414BE74 /* Pods */ = {
+		6444E738657914736FABEACD /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				F928DA5E1E6A180CA19D4ADB /* Pods-RouteFoundationExample.debug.xcconfig */,
-				C36D0D6E8CA38DA0EBF490F8 /* Pods-RouteFoundationExample.release.xcconfig */,
+				19FAF4EE4DF4B35BB6F60D48 /* Pods-RouteFoundationExample.debug.xcconfig */,
+				CF41488900499ECDD9F8A96F /* Pods-RouteFoundationExample.release.xcconfig */,
 			);
 			name = Pods;
 			path = Pods;
@@ -87,14 +95,6 @@
 			path = ../../RouteFoundation;
 			sourceTree = "<group>";
 		};
-		A52761FCD74215CB371E92A8 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				3B57694638E7BC2F8C9D82B8 /* Pods_RouteFoundationExample.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -102,12 +102,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4A89455E0F1E672E58D1115F /* Build configuration list for PBXNativeTarget "RouteFoundationExample" */;
 			buildPhases = (
-				0B656DD64DAB33ACE31940FC /* [CP] Check Pods Manifest.lock */,
+				8B27F27D6AEF7AEAF282128D /* [CP] Check Pods Manifest.lock */,
 				1A273799BCC4F3ADB4B7F09C /* Sources */,
 				CE3BB1B6DE4C396E9BABDB66 /* SwiftLint */,
 				400D38066143B02D2D3AD27B /* Resources */,
-				D6373FC94458BE58D9D744CB /* Frameworks */,
-				99C0E3CC2B8CB71C5EFF1182 /* [CP] Embed Pods Frameworks */,
+				667F55B6142D9EC2C997EAC3 /* Frameworks */,
+				5728083AE22F94A05F4378DE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -162,7 +162,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0B656DD64DAB33ACE31940FC /* [CP] Check Pods Manifest.lock */ = {
+		5728083AE22F94A05F4378DE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RouteFoundationExample/Pods-RouteFoundationExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RouteFoundationExample/Pods-RouteFoundationExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RouteFoundationExample/Pods-RouteFoundationExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8B27F27D6AEF7AEAF282128D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -182,23 +199,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		99C0E3CC2B8CB71C5EFF1182 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-RouteFoundationExample/Pods-RouteFoundationExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-RouteFoundationExample/Pods-RouteFoundationExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RouteFoundationExample/Pods-RouteFoundationExample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CE3BB1B6DE4C396E9BABDB66 /* SwiftLint */ = {
@@ -305,7 +305,7 @@
 		};
 		87E8242C44DF74134FDA2D6B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F928DA5E1E6A180CA19D4ADB /* Pods-RouteFoundationExample.debug.xcconfig */;
+			baseConfigurationReference = 19FAF4EE4DF4B35BB6F60D48 /* Pods-RouteFoundationExample.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -388,7 +388,7 @@
 		};
 		E04CFE4ADEA63268766DAB0A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C36D0D6E8CA38DA0EBF490F8 /* Pods-RouteFoundationExample.release.xcconfig */;
+			baseConfigurationReference = CF41488900499ECDD9F8A96F /* Pods-RouteFoundationExample.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;

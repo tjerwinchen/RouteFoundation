@@ -62,5 +62,6 @@ final class ConcurrentLock: ConcurrentLocking {
 
   // MARK: Internal
 
+  // Initialization of lock, pthread_rwlock_t is a value type and must be declared as var in order to refer it later. Make sure not to copy it.
   var rwlock = pthread_rwlock_t()
 }
