@@ -34,14 +34,15 @@ final class Resolver {
 
   static let shared = Resolver()
 
-  private(set) var factories: [String: Any] = [:]
+  @ConcurrentDictionary
+  var factories: [String: Any] = [:]
 
   func add<FactoryInput, FactoryOutput>(identifier: String, factory: @escaping (FactoryInput) -> FactoryOutput) {
-    factories.updateValue(factory, forKey: identifier)
+    $factories.updateValue(factory, forKey: identifier)
   }
 
   func factory<FactoryInput, FactoryOutput>(for identifier: String, factoryInput: FactoryInput.Type, factoryOutput: FactoryOutput.Type) -> ((FactoryInput) -> FactoryOutput)? {
-    factories[identifier] as? ((FactoryInput) -> FactoryOutput)
+    $factories[identifier] as? ((FactoryInput) -> FactoryOutput)
   }
 
   func resolve<FactoryInput, FactoryOutput>(identifier: String, factoryInput: FactoryInput.Type, factoryOutput: FactoryOutput.Type, input: FactoryInput) throws -> FactoryOutput {
