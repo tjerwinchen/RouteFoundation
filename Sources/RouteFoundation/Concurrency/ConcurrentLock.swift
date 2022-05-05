@@ -28,8 +28,13 @@ import Foundation
 protocol ConcurrentLocking: AnyObject {
   var rwlock: pthread_rwlock_t { get set }
 
+  /// Unlocking
   func unlock()
+
+  /// Locking for writing
   func writeLock()
+
+  /// Locking for reading
   func readLock()
 }
 
@@ -42,6 +47,7 @@ extension ConcurrentLocking {
     pthread_rwlock_wrlock(&rwlock)
   }
 
+  /// Locking for reading
   func readLock() {
     pthread_rwlock_rdlock(&rwlock)
   }
@@ -52,6 +58,7 @@ extension ConcurrentLocking {
 final class ConcurrentLock: ConcurrentLocking {
   // MARK: Lifecycle
 
+  /// Initializes a newly allocated ConcurrentLock object.
   init() {
     pthread_rwlock_init(&rwlock, nil)
   }
@@ -62,6 +69,6 @@ final class ConcurrentLock: ConcurrentLocking {
 
   // MARK: Internal
 
-  // Initialization of lock, pthread_rwlock_t is a value type and must be declared as var in order to refer it later. Make sure not to copy it.
+  // A pthread read-write lock object.
   var rwlock = pthread_rwlock_t()
 }
