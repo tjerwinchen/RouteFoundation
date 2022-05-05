@@ -23,8 +23,11 @@
 
 import Foundation
 
+typealias ResolverFactory<Input, Output> = (Input) -> Output
+
 // MARK: - Resolver
 
+/// A lightweight DI class
 final class Resolver {
   // MARK: Lifecycle
 
@@ -37,16 +40,19 @@ final class Resolver {
   @ConcurrentDictionary
   var factories: [String: Any] = [:]
 
-  func add<FactoryInput, FactoryOutput>(identifier: String, factory: @escaping (FactoryInput) -> FactoryOutput) {
+  /// Adds a ResolverFactory to this resolver.
+  func add<Input, Output>(identifier: String, factory: @escaping ResolverFactory<Input, Output>) {
     $factories.updateValue(factory, forKey: identifier)
   }
 
-  func factory<FactoryInput, FactoryOutput>(for identifier: String, factoryInput: FactoryInput.Type, factoryOutput: FactoryOutput.Type) -> ((FactoryInput) -> FactoryOutput)? {
-    $factories[identifier] as? ((FactoryInput) -> FactoryOutput)
+  /// Get a ResolverFactory from this resolver.
+  func factory<Input, Output>(for identifier: String) -> ResolverFactory<Input, Output>? {
+    $factories[identifier] as? ResolverFactory<Input, Output>
   }
 
-  func resolve<FactoryInput, FactoryOutput>(identifier: String, factoryInput: FactoryInput.Type, factoryOutput: FactoryOutput.Type, input: FactoryInput) throws -> FactoryOutput {
-    guard let factory = factory(for: identifier, factoryInput: FactoryInput.self, factoryOutput: FactoryOutput.self) else {
+  /// Called to resolve an existing ResolverFactory.
+  func resolve<Input, Output>(identifier: String, type: Output.Type, input: Input) throws -> Output {
+    guard let factory: ResolverFactory<Input, Output> = factory(for: identifier) else {
       throw ResolverError.notFound(factoryKey: identifier)
     }
 

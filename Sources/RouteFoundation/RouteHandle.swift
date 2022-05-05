@@ -92,7 +92,7 @@ extension RouteHandle {
     let parameter: Route.ViewControllerProviderParameters = (url, url.queryParameters, context)
 
     do {
-      return try Resolver.shared.resolve(identifier: identifier, factoryInput: Route.ViewControllerProviderParameters.self, factoryOutput: UIViewController?.self, input: parameter)
+      return try Resolver.shared.resolve(identifier: identifier, type: UIViewController?.self, input: parameter)
     } catch {
       return nil
     }
@@ -112,7 +112,7 @@ extension RouteHandle {
 
     return {
       do {
-        return try Resolver.shared.resolve(identifier: identifier, factoryInput: Route.URLOpenHandlerProviderParameters.self, factoryOutput: Bool.self, input: parameter)
+        return try Resolver.shared.resolve(identifier: identifier, type: Bool.self, input: parameter)
       } catch {
         return false
       }
