@@ -124,7 +124,7 @@ extension RouteHandle {
       return
     }
 
-    let fromViewController = sourceViewController ?? UIApplication.sharedInstance?.topViewController
+    let fromViewController = sourceViewController ?? UIApplication.shared.topViewController
     DispatchQueue.main.async {
       fromViewController?.show(destViewController, sender: fromViewController)
     }
@@ -135,7 +135,7 @@ extension RouteHandle {
       return
     }
 
-    guard let fromViewController = sourceViewController ?? UIApplication.sharedInstance?.topViewController else {
+    guard let fromViewController = sourceViewController ?? UIApplication.shared.topViewController else {
       return
     }
 
@@ -155,7 +155,7 @@ extension RouteHandle {
       return
     }
 
-    guard let navigationController = navigationController ?? UIApplication.sharedInstance?.foregroundNavigationController else {
+    guard let navigationController = navigationController ?? UIApplication.shared.foregroundNavigationController else {
       return
     }
 
@@ -174,7 +174,7 @@ extension RouteHandle {
       return
     }
 
-    guard let fromViewController = sourceViewController ?? UIApplication.sharedInstance?.topViewController else {
+    guard let fromViewController = sourceViewController ?? UIApplication.shared.topViewController else {
       return
     }
 

@@ -26,7 +26,7 @@ import UIKit
 extension UIKitExtension where Self: UIApplication {
   /// Returns the current application's top most view controller.
   var topViewController: UIViewController? {
-    UIApplication.sharedInstance?.windows
+    UIApplication.shared.windows
       .filter(\.isKeyWindow)
       .filter { windows in
         windows.rootViewController != nil

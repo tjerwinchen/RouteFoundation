@@ -23,6 +23,8 @@
 
 import UIKit
 
+// MARK: - UIKitExtension
+
 protocol UIKitExtension {
   /// The most top view controller
   var topViewController: UIViewController? { get }
