@@ -1,4 +1,4 @@
-// AppRoute.swift
+// ResolverFactory.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -21,24 +21,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import RouteFoundation
-import UIKit
+import Foundation
 
-enum AppRoute: String, Route {
-  case root
-  case pageShow
-  case pageShowDetail
-  case pagePush
-  case pagePresent
+// MARK: - ResolverFactory
 
-  // MARK: Internal
+public protocol ResolverFactory {
+  associatedtype Args
+  associatedtype Service
 
-  var viewControllerProvider: RouteViewControllerProvider {
-    { arg in
-      let (_, params, _) = arg
-      let viewController = RouteSampleViewController()
-      viewController.title = params["title"]
-      return viewController
-    }
+  func resolve(args: Args) -> Service
+
+  var closure: (Args) -> Service { get }
+}
+
+extension ResolverFactory {
+  public func resolve(args: Args) -> Service {
+    closure(args)
   }
+}
+
+// MARK: - ResolverFactoryImpl
+
+public class ResolverFactoryImpl<Args, Service>: ResolverFactory {
+  // MARK: Lifecycle
+
+  public init(service: Service.Type = Service.self, args: Args.Type = Args.self, closure: @escaping (Args) -> Service) {
+    self.closure = closure
+  }
+
+  // MARK: Public
+
+  public let closure: (Args) -> Service
 }

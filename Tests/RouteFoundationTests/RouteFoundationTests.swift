@@ -24,76 +24,34 @@
 @testable import RouteFoundation
 import XCTest
 
-// MARK: - AppRoute
-
-enum AppRoute: String, Route {
-  case welcome
-  case home
-
-  // MARK: Internal
-
-  var viewControllerProvider: ViewControllerProvider {
-    switch self {
-    case .welcome:
-      return { _, _, _ -> UIViewController in
-        UIViewController()
-      }
-    case .home:
-      return { _, _, _ -> UIViewController in
-        UIViewController()
-      }
-    }
-  }
-}
-
 // MARK: - RouteFoundationTests
 
 final class RouteFoundationTests: XCTestCase {
-  func testExample() throws {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct
-    // results.
-    XCTAssertEqual(RouteFoundation().text, "Hello, World!")
-
-    RouteManager.shared.register(pattern: AppRoute.welcome.urlPattern) { _, _, _ in
-
-      true
-    }
+  override func setUp() {
+    super.setUp()
+    AppRoute.registerAll()
   }
-}
 
-// MARK: - URLConvertibleTests
+  func test_getViewControllerFromRoute() {
+    let homeViewController = AppRoute.home.viewController(queryParameters: ["title": "Home"])
+    XCTAssertTrue(homeViewController.isMember(of: HomeViewController.self))
+    XCTAssertEqual(homeViewController.title, "Home")
 
-final class URLConvertibleTests: XCTestCase {
-  func test_all() throws {
-    let url1 = "特斯拉.com/vehicles?id=1&vin=212241AB56D1F"
-    let url2 = "特斯拉.com/vehicles/?id=1&vin=212241AB56D1F"
-
-    XCTAssertEqual(url1.urlValue?.absoluteString, "%E7%89%B9%E6%96%AF%E6%8B%89.com/vehicles?id=1&vin=212241AB56D1F")
-    XCTAssertEqual(url2.urlValue?.absoluteString, "%E7%89%B9%E6%96%AF%E6%8B%89.com/vehicles/?id=1&vin=212241AB56D1F")
-    XCTAssertEqual(url1.queryParameters, ["id": "1", "vin": "212241AB56D1F"])
-    print(url1.queryParameters)
-    print(url1.queryItems)
+    let viewModel = WelcomeViewModel(title: "Welcome")
+    let welcomeViewController = AppRoute.welcome.viewController(context: viewModel)
+    XCTAssertTrue(welcomeViewController.isMember(of: WelcomeViewController.self))
+    XCTAssertEqual(welcomeViewController.title, "Welcome")
   }
-}
 
-// MARK: - ResolverTests
+  // swiftlint:disable force_unwrapping
+  func test_getViewControllerFromRouteManager() {
+    let homeViewController = RouteManager.shared.viewController(for: "home?title=Home")!
+    XCTAssertTrue(homeViewController.isMember(of: HomeViewController.self))
+    XCTAssertEqual(homeViewController.title, "Home")
 
-final class ResolverTests: XCTestCase {
-  typealias ViewControllerFactoryParam = (URLConvertible, queryParameters: [String: String], context: Any?)
-
-  typealias ViewControllerFactory = (ViewControllerFactoryParam) -> UIViewController?
-
-  func test_all() {
-    let factory: ViewControllerFactory = { arg -> UIViewController? in
-      let (url, params, context) = arg
-      print(url, params, context)
-      return UIViewController()
-    }
-
-    Resolver.shared.add(identifier: "123", factory: factory)
-
-    let parameters: ViewControllerFactoryParam = ("https://dadfa", [:], nil)
-    let viewController = Resolver.shared.resolve(identifier: "xxx", factoryOutput: UIViewController.Type.self, input: parameters)
+    let viewModel = WelcomeViewModel(title: "Welcome")
+    let welcomeViewController = RouteManager.shared.viewController(for: "welcome", context: viewModel)!
+    XCTAssertTrue(welcomeViewController.isMember(of: WelcomeViewController.self))
+    XCTAssertEqual(welcomeViewController.title, "Welcome")
   }
 }

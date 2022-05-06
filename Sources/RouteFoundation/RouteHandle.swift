@@ -21,6 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import OSLog
 import UIKit
 
 // MARK: - RouteHandle
@@ -73,7 +74,8 @@ extension RouteHandle {
       return
     }
 
-    Resolver.shared.add(identifier: identifier, factory: viewControllerProvider)
+    let resolverFactory = ResolverFactoryImpl(closure: viewControllerProvider)
+    Resolver.shared.add(identifier: identifier, resolverFactory: resolverFactory)
   }
 
   public func register(pattern: URLConvertible, urlOpenHandlerProvider: @escaping RouteURLOpenHandlerProvider) {
@@ -81,7 +83,8 @@ extension RouteHandle {
       return
     }
 
-    Resolver.shared.add(identifier: identifier, factory: urlOpenHandlerProvider)
+    let resolverFactory = ResolverFactoryImpl(closure: urlOpenHandlerProvider)
+    Resolver.shared.add(identifier: identifier, resolverFactory: resolverFactory)
   }
 
   public func viewController(for url: URLConvertible, context: Any? = nil) -> UIViewController? {
@@ -92,8 +95,11 @@ extension RouteHandle {
     let parameter: (url: URLConvertible, parameters: [String: String], context: Any?) = (url, url.queryParameters, context)
 
     do {
-      return try Resolver.shared.resolve(identifier: identifier, type: UIViewController?.self, input: parameter)
+      return try Resolver.shared.resolve(ViewControllerResolverFactory.self, identifier: identifier, args: parameter)
     } catch {
+      if #available(iOS 10.0, *) {
+        os_log("%@", error.localizedDescription)
+      }
       return nil
     }
   }
@@ -112,7 +118,7 @@ extension RouteHandle {
 
     return {
       do {
-        return try Resolver.shared.resolve(identifier: identifier, type: Bool.self, input: parameter)
+        return try Resolver.shared.resolve(URLOpenHandlerResolverFactory.self, identifier: identifier, args: parameter)
       } catch {
         return false
       }

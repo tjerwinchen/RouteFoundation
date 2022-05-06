@@ -24,7 +24,11 @@
 import UIKit
 
 /// (_ url: URLConvertible, queryParameters: [String: String], context: Any?)
-public typealias RouteViewControllerProvider = ((url: URLConvertible, parameters: [String: String], context: Any?)) -> UIViewController?
+public typealias ViewControllerResolverFactory = ResolverFactoryImpl<(url: URLConvertible, parameters: [String: String], context: Any?), UIViewController?>
+
+public typealias URLOpenHandlerResolverFactory = ResolverFactoryImpl<(url: URLConvertible, parameters: [String: String]), Bool>
+
+public typealias RouteViewControllerProvider = (ViewControllerResolverFactory.Args) -> ViewControllerResolverFactory.Service
 
 /// (_ url: URLConvertible, queryParameters: [String: String])
 public typealias RouteURLOpenHandlerProvider = ((url: URLConvertible, parameters: [String: String])) -> Bool

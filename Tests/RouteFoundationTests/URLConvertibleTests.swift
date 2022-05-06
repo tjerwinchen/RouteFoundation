@@ -1,4 +1,4 @@
-// AppRoute.swift
+// URLConvertibleTests.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -21,24 +21,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import RouteFoundation
-import UIKit
+import Foundation
+@testable import RouteFoundation
+import XCTest
 
-enum AppRoute: String, Route {
-  case root
-  case pageShow
-  case pageShowDetail
-  case pagePush
-  case pagePresent
+// MARK: - URLConvertibleTests
 
-  // MARK: Internal
+final class URLConvertibleTests: XCTestCase {
+  func test_all() throws {
+    let url1 = "特斯拉.com/vehicles?id=1&vin=212241AB56D1F"
+    let url2 = "特斯拉.com/vehicles/?id=1&vin=212241AB56D1F"
 
-  var viewControllerProvider: RouteViewControllerProvider {
-    { arg in
-      let (_, params, _) = arg
-      let viewController = RouteSampleViewController()
-      viewController.title = params["title"]
-      return viewController
-    }
+    XCTAssertEqual(url1.urlValue?.absoluteString, "%E7%89%B9%E6%96%AF%E6%8B%89.com/vehicles?id=1&vin=212241AB56D1F")
+    XCTAssertEqual(url2.urlValue?.absoluteString, "%E7%89%B9%E6%96%AF%E6%8B%89.com/vehicles/?id=1&vin=212241AB56D1F")
+    XCTAssertEqual(url1.queryParameters, ["id": "1", "vin": "212241AB56D1F"])
   }
 }

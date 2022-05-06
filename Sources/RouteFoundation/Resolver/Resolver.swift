@@ -23,56 +23,36 @@
 
 import Foundation
 
-typealias ResolverFactory<Input, Output> = (Input) -> Output
-
 // MARK: - Resolver
 
-/// A lightweight DI class
-final class Resolver {
+/// A lightweight resolver for DI
+public final class Resolver {
   // MARK: Lifecycle
 
   private init() {}
 
-  // MARK: Internal
+  // MARK: Public
 
-  static let shared = Resolver()
+  public static let shared = Resolver()
 
-  @ConcurrentDictionary
-  var factories: [String: Any] = [:]
-
-  /// Adds a ResolverFactory to this resolver.
-  func add<Input, Output>(identifier: String, factory: @escaping ResolverFactory<Input, Output>) {
-    $factories.updateValue(factory, forKey: identifier)
+  public func add<T: ResolverFactory>(identifier: String, resolverFactory: T) {
+    $resolverFactories.updateValue(resolverFactory, forKey: identifier)
   }
 
-  /// Get a ResolverFactory from this resolver.
-  func factory<Input, Output>(for identifier: String) -> ResolverFactory<Input, Output>? {
-    $factories[identifier] as? ResolverFactory<Input, Output>
+  public func factory<T: ResolverFactory>(_ type: T.Type = T.self, for identifier: String) -> T? {
+    $resolverFactories[identifier] as? T
   }
 
-  /// Called to resolve an existing ResolverFactory.
-  func resolve<Input, Output>(identifier: String, type: Output.Type, input: Input) throws -> Output {
-    guard let factory: ResolverFactory<Input, Output> = factory(for: identifier) else {
+  public func resolve<T: ResolverFactory>(_ type: T.Type = T.self, identifier: String, args: T.Args) throws -> T.Service {
+    guard let resolverFactory: T = factory(for: identifier) else {
       throw ResolverError.notFound(factoryKey: identifier)
     }
 
-    return factory(input)
+    return resolverFactory.resolve(args: args)
   }
-}
 
-// MARK: - ResolverError
+  // MARK: Internal
 
-enum ResolverError: Error {
-  case notFound(factoryKey: String)
-}
-
-// MARK: CustomStringConvertible
-
-extension ResolverError: CustomStringConvertible {
-  var description: String {
-    switch self {
-    case let .notFound(factoryKey):
-      return "The factory \(factoryKey) not found."
-    }
-  }
+  @ConcurrentDictionary
+  var resolverFactories: [String: Any] = [:]
 }

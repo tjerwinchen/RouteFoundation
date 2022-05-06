@@ -1,4 +1,4 @@
-// AppRoute.swift
+// ResolverError.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -21,24 +21,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import RouteFoundation
-import UIKit
+import Foundation
 
-enum AppRoute: String, Route {
-  case root
-  case pageShow
-  case pageShowDetail
-  case pagePush
-  case pagePresent
+// MARK: - ResolverError
 
-  // MARK: Internal
+public enum ResolverError: Error {
+  case notFound(factoryKey: String)
+}
 
-  var viewControllerProvider: RouteViewControllerProvider {
-    { arg in
-      let (_, params, _) = arg
-      let viewController = RouteSampleViewController()
-      viewController.title = params["title"]
-      return viewController
+// MARK: CustomStringConvertible
+
+extension ResolverError: CustomStringConvertible {
+  public var description: String {
+    switch self {
+    case let .notFound(factoryKey):
+      return "The factory \(factoryKey) not found."
     }
   }
 }
