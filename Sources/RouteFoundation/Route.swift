@@ -23,19 +23,13 @@
 
 import UIKit
 
-extension Route {
-  /// (_ url: URLConvertible, queryParameters: [String: String], context: Any?)
-  public typealias ViewControllerProviderParameters = (URLConvertible, [String: String], Any?)
+/// (_ url: URLConvertible, queryParameters: [String: String], context: Any?)
+public typealias RouteViewControllerProvider = ((url: URLConvertible, parameters: [String: String], context: Any?)) -> UIViewController?
 
-  public typealias ViewControllerProvider = (ViewControllerProviderParameters) -> UIViewController?
+/// (_ url: URLConvertible, queryParameters: [String: String])
+public typealias RouteURLOpenHandlerProvider = ((url: URLConvertible, parameters: [String: String])) -> Bool
 
-  /// (_ url: URLConvertible, queryParameters: [String: String])
-  public typealias URLOpenHandlerProviderParameters = (URLConvertible, [String: String])
-
-  public typealias URLOpenHandlerProvider = (URLOpenHandlerProviderParameters) -> Bool
-
-  public typealias URLOpenHandler = () -> Bool
-}
+public typealias RouteURLOpenHandler = () -> Bool
 
 // MARK: - Route
 
@@ -44,10 +38,10 @@ public protocol Route: CaseIterable, RawRepresentable where RawValue == String {
   var urlPattern: String { get }
 
   /// view cotroller provider for the route
-  var viewControllerProvider: ViewControllerProvider { get }
+  var viewControllerProvider: RouteViewControllerProvider { get }
 
   /// url open hanlder for the route
-  var urlOpenHandlerProvider: URLOpenHandlerProvider { get }
+  var urlOpenHandlerProvider: RouteURLOpenHandlerProvider { get }
 
   /// view controller for a ruote
   func viewController(queryParameters: [String: String], context: Any?) -> UIViewController
@@ -76,7 +70,7 @@ extension Route {
     rawValue
   }
 
-  public var urlOpenHandlerProvider: URLOpenHandlerProvider {
+  public var urlOpenHandlerProvider: RouteURLOpenHandlerProvider {
     { arg in
       let (_, queryParameters) = arg
       show(queryParameters: queryParameters, context: nil, from: nil)
