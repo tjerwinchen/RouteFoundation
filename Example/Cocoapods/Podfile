@@ -1,7 +1,7 @@
-platform :ios, '13.0'
+platform :ios, '12.0'
 
 target 'RouteFoundationExample' do
   use_frameworks!
 
-  pod 'RouteFoundation', :path=> '../../'
+  pod 'RouteFoundation', :path=> '../../', :testspecs => ['Tests']
 end

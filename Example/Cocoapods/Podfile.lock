@@ -1,16 +1,18 @@
 PODS:
   - RouteFoundation (0.0.1)
+  - RouteFoundation/Tests (0.0.1)
 
 DEPENDENCIES:
   - RouteFoundation (from `../../`)
+  - RouteFoundation/Tests (from `../../`)
 
 EXTERNAL SOURCES:
   RouteFoundation:
     :path: "../../"
 
 SPEC CHECKSUMS:
-  RouteFoundation: 156e67d409fa8b4b0f658f4e81765f9ef6e976b4
+  RouteFoundation: ffce4a7a23cd8b1408381750eb162612bbab5e84
 
-PODFILE CHECKSUM: 2b28e398b001d651fa712db11285b1f1f1d6d4dd
+PODFILE CHECKSUM: db26c1e26e44942129bb92cce4152eafbd6c5d09
 
 COCOAPODS: 1.11.3
