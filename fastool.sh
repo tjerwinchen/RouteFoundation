@@ -85,6 +85,14 @@ function podlint() {
   fi
 }
 
+function release() {
+  if output=$(git status --untracked-files=no --porcelain) && [ -z "$output" ]; then
+    podlint
+  else
+    printf "⚠️  You have uncommitted changes.\n${output}\n"
+  fi
+}
+
 function generate() {
   xcodegen generate -s Example/Cocoapods/.project.yml --project Example/Cocoapods/
   xcodegen generate -s Example/SPM/.project.yml --project Example/SPM/
@@ -95,7 +103,7 @@ function check() {
   lint
 }
 
-if [[ $1 =~ ^(format|lint|check|podlint|generate)$ ]]; then
+if [[ $1 =~ ^(format|lint|check|podlint|release|generate)$ ]]; then
   # Parsing common args
   parse_args "$@"
   "$@"
