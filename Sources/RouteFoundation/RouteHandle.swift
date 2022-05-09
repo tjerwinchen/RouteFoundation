@@ -65,8 +65,9 @@ extension RouteHandle {
     }
 
     let tag = Int(bitPattern: ObjectIdentifier(type))
+    let owner = Int(bitPattern: ObjectIdentifier(self))
 
-    return "\(urlPattern)#\(tag)"
+    return "\(urlPattern)#\(tag)@\(owner)"
   }
 
   public func register(pattern: URLConvertible, viewControllerProvider: @escaping RouteViewControllerProvider) {
@@ -130,7 +131,7 @@ extension RouteHandle {
       return
     }
 
-    let fromViewController = sourceViewController ?? UIApplication.shared.topViewController
+    let fromViewController = sourceViewController ?? UIApplication.shared.topMostViewController
     DispatchQueue.main.async {
       fromViewController?.show(destViewController, sender: fromViewController)
     }
@@ -141,7 +142,7 @@ extension RouteHandle {
       return
     }
 
-    guard let fromViewController = sourceViewController ?? UIApplication.shared.topViewController else {
+    guard let fromViewController = sourceViewController ?? UIApplication.shared.topMostViewController else {
       return
     }
 
@@ -180,7 +181,7 @@ extension RouteHandle {
       return
     }
 
-    guard let fromViewController = sourceViewController ?? UIApplication.shared.topViewController else {
+    guard let fromViewController = sourceViewController ?? UIApplication.shared.topMostViewController else {
       return
     }
 

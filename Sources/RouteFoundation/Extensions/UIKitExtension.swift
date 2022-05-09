@@ -27,7 +27,7 @@ import UIKit
 
 protocol UIKitExtension {
   /// The most top view controller
-  var topViewController: UIViewController? { get }
+  var topMostViewController: UIViewController? { get }
 
   /// The navigation controller that is foreground of this view controller or view
   var foregroundNavigationController: UINavigationController? { get }

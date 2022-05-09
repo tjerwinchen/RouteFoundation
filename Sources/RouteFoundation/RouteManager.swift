@@ -26,7 +26,7 @@ import UIKit
 public final class RouteManager: RouteHandle {
   // MARK: Lifecycle
 
-  private init() {}
+  init() {}
 
   // MARK: Public
 

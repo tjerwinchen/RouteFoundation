@@ -25,17 +25,17 @@ import UIKit
 
 extension UIKitExtension where Self: UIApplication {
   /// Returns the current application's top most view controller.
-  var topViewController: UIViewController? {
+  var topMostViewController: UIViewController? {
     UIApplication.shared.windows
       .filter(\.isKeyWindow)
       .filter { windows in
         windows.rootViewController != nil
-      }.first?.rootViewController?.topViewController
+      }.first?.rootViewController?.topMostViewController
   }
 
   /// The navigation controller that is foreground of this view controller
   var foregroundNavigationController: UINavigationController? {
-    topViewController?.view.foregroundNavigationController
+    topMostViewController?.view.foregroundNavigationController
   }
 }
 
