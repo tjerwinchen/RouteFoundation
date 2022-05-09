@@ -38,8 +38,8 @@ extension UIKitExtension where Self: UIView {
     return nil
   }
 
-  var topViewController: UIViewController? {
-    (next as? UIViewController)?.topViewController
+  var topMostViewController: UIViewController? {
+    (next as? UIViewController)?.topMostViewController
   }
 }
 

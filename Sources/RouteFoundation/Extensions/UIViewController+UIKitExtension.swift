@@ -24,37 +24,37 @@
 import UIKit
 
 extension UIKitExtension where Self: UIViewController {
-  var topViewController: UIViewController? {
+  var topMostViewController: UIViewController? {
     // presented view controller
     if let presentedViewController = presentedViewController {
-      return presentedViewController.topViewController
+      return presentedViewController.topMostViewController
     }
 
     // UITabBarController
     if let tabBarController = self as? UITabBarController,
        let selectedViewController = tabBarController.selectedViewController
     {
-      return selectedViewController.topViewController
+      return selectedViewController.topMostViewController
     }
 
     // UINavigationController
     if let navigationController = self as? UINavigationController,
        let visibleViewController = navigationController.visibleViewController
     {
-      return visibleViewController.topViewController
+      return visibleViewController.topMostViewController
     }
 
     // UIPageController
     if let pageViewController = self as? UIPageViewController,
        pageViewController.viewControllers?.count == 1
     {
-      return pageViewController.viewControllers?.first?.topViewController
+      return pageViewController.viewControllers?.first?.topMostViewController
     }
 
     // child view controller
     for subview in view?.subviews ?? [] {
       if let childViewController = subview.next as? UIViewController {
-        return childViewController.topViewController
+        return childViewController.topMostViewController
       }
     }
 
@@ -62,7 +62,7 @@ extension UIKitExtension where Self: UIViewController {
   }
 
   var foregroundNavigationController: UINavigationController? {
-    topViewController?.view.foregroundNavigationController
+    topMostViewController?.view.foregroundNavigationController
   }
 }
 
