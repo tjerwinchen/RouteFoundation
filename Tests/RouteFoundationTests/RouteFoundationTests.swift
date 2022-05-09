@@ -45,13 +45,40 @@ final class RouteFoundationTests: XCTestCase {
 
   // swiftlint:disable force_unwrapping
   func test_getViewControllerFromRouteManager() {
-    let homeViewController = RouteManager.shared.viewController(for: "home?title=Home")!
+    let routeManager = RouteManager()
+
+    routeManager.register(pattern: "home") { args in
+      HomeViewController(url: args.url, params: args.parameters, context: args.context as? Context)
+    }
+
+    let homeViewController = routeManager.viewController(for: "home?title=Home", context: nil)!
     XCTAssertTrue(homeViewController.isMember(of: HomeViewController.self))
     XCTAssertEqual(homeViewController.title, "Home")
 
     let viewModel = WelcomeViewModel(title: "Welcome")
-    let welcomeViewController = RouteManager.shared.viewController(for: "welcome", context: viewModel)!
+    routeManager.register(pattern: "welcome") { args in
+      WelcomeViewController(url: args.url, params: args.parameters, viewModel: args.context as? WelcomeViewModel)
+    }
+    let welcomeViewController = routeManager.viewController(for: "welcome?q=w", context: viewModel)!
     XCTAssertTrue(welcomeViewController.isMember(of: WelcomeViewController.self))
     XCTAssertEqual(welcomeViewController.title, "Welcome")
+  }
+
+  func test_routeOwnership() {
+    let routeManager1 = RouteManager()
+    routeManager1.register(pattern: "home") { args in
+      HomeViewController(url: args.url, params: args.parameters, context: args.context as? Context)
+    }
+
+    let routeManager2 = RouteManager()
+    routeManager2.register(pattern: "home") { _ in
+      UIViewController()
+    }
+
+    let homeViewController1 = routeManager1.viewController(for: "home")!
+    let homeViewController2 = routeManager2.viewController(for: "home")!
+
+    XCTAssertTrue(homeViewController1.isMember(of: HomeViewController.self))
+    XCTAssertTrue(homeViewController2.isMember(of: UIViewController.self))
   }
 }

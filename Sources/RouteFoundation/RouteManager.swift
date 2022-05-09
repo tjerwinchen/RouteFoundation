@@ -23,7 +23,7 @@
 
 import UIKit
 
-public final class RouteManager: RouteHandle {
+public final class RouteManager: RouteManaging {
   // MARK: Lifecycle
 
   init() {}
@@ -31,4 +31,6 @@ public final class RouteManager: RouteHandle {
   // MARK: Public
 
   public static let shared = RouteManager()
+
+  public let resolver = Resolver()
 }

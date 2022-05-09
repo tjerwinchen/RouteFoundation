@@ -97,6 +97,16 @@ iOSInjectionProject/
 #           - AS PER https://guides.cocoapods.org/using/using-cocoapods.html NEVER IGNORE THE LOCK FILE
 Pods/
 
+### Mockingbird
+# Generated
+*.generated.swift
+
+# Binaries
+lib_InternalSwiftSyntaxParser.dylib
+
+# Caches
+.mockingbird/
+
 # End of https://www.toptal.com/developers/gitignore/api/cocoapods
 
 .DS_Store

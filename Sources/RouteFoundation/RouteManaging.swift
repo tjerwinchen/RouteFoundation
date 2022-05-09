@@ -1,4 +1,4 @@
-// RouteHandle.swift
+// RouteManaging.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -24,9 +24,11 @@
 import OSLog
 import UIKit
 
-// MARK: - RouteHandle
+// MARK: - RouteManaging
 
-public protocol RouteHandle: AnyObject {
+public protocol RouteManaging: AnyObject {
+  var resolver: Resolver { get }
+
   /// Register a pattern with a ViewController provider
   func register(pattern: URLConvertible, viewControllerProvider: @escaping RouteViewControllerProvider)
 
@@ -58,7 +60,7 @@ public protocol RouteHandle: AnyObject {
 
 // MARK: - Default Implementation
 
-extension RouteHandle {
+extension RouteManaging {
   func identifier(from url: URLConvertible, type: Any.Type) -> String? {
     guard let urlPattern = url.urlValue?.path.trimmingCharacters(in: CharacterSet(charactersIn: "/")) else {
       return nil
@@ -76,7 +78,7 @@ extension RouteHandle {
     }
 
     let resolverFactory = ResolverFactoryImpl(closure: viewControllerProvider)
-    Resolver.shared.add(identifier: identifier, resolverFactory: resolverFactory)
+    resolver.add(identifier: identifier, resolverFactory: resolverFactory)
   }
 
   public func register(pattern: URLConvertible, urlOpenHandlerProvider: @escaping RouteURLOpenHandlerProvider) {
@@ -85,7 +87,7 @@ extension RouteHandle {
     }
 
     let resolverFactory = ResolverFactoryImpl(closure: urlOpenHandlerProvider)
-    Resolver.shared.add(identifier: identifier, resolverFactory: resolverFactory)
+    resolver.add(identifier: identifier, resolverFactory: resolverFactory)
   }
 
   public func viewController(for url: URLConvertible, context: Any? = nil) -> UIViewController? {
@@ -96,7 +98,7 @@ extension RouteHandle {
     let parameter: (url: URLConvertible, parameters: [String: String], context: Any?) = (url, url.queryParameters, context)
 
     do {
-      return try Resolver.shared.resolve(ViewControllerResolverFactory.self, identifier: identifier, args: parameter)
+      return try resolver.resolve(ViewControllerResolverFactory.self, identifier: identifier, args: parameter)
     } catch {
       if #available(iOS 10.0, *) {
         os_log("%@", error.localizedDescription)
@@ -117,9 +119,12 @@ extension RouteHandle {
 
     let parameter: (url: URLConvertible, parameters: [String: String]) = (url, url.queryParameters)
 
-    return {
+    return { [weak self] in
+      guard let self = self else {
+        return false
+      }
       do {
-        return try Resolver.shared.resolve(URLOpenHandlerResolverFactory.self, identifier: identifier, args: parameter)
+        return try self.resolver.resolve(URLOpenHandlerResolverFactory.self, identifier: identifier, args: parameter)
       } catch {
         return false
       }

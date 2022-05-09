@@ -9,10 +9,11 @@ let package = Package(
     .library(name: "RouteFoundation", targets: ["RouteFoundation"]),
   ],
   dependencies: [
-    // .package(url: /* package url */, from: "1.0.0"),
   ],
   targets: [
     .target(name: "RouteFoundation", dependencies: []),
-    .testTarget(name: "RouteFoundationTests", dependencies: ["RouteFoundation"]),
+    .testTarget(name: "RouteFoundationTests", dependencies: [
+      .target(name: "RouteFoundation"),
+    ]),
   ]
 )

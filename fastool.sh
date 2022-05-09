@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-
+set -eu
 cd "$(dirname "$0")" || exit
 
 SWIFTFORMAT_FILE=~/.tooling/swiftformat/base
@@ -98,12 +98,24 @@ function generate() {
   xcodegen generate -s Example/SPM/.project.yml --project Example/SPM/
 }
 
+function mockgen() {
+  if ! which .build/checkouts/mockingbird/mockingbird &> /dev/null; then
+    swift package update Mockingbird
+  fi
+  swift package describe --type json > project.json
+  .build/checkouts/mockingbird/mockingbird generate --project project.json \
+    --disable-swiftlint \
+    --output-dir Tests/RouteFoundationTests/Generated \
+    --testbundle RouteFoundationTests \
+    --targets RouteFoundation
+}
+
 function check() {
   format
   lint
 }
 
-if [[ $1 =~ ^(format|lint|check|podlint|release|generate)$ ]]; then
+if [[ $1 =~ ^(format|lint|check|podlint|release|generate|mockgen)$ ]]; then
   # Parsing common args
   parse_args "$@"
   "$@"
