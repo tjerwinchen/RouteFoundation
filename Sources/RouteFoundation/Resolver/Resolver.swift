@@ -29,7 +29,7 @@ import Foundation
 public final class Resolver {
   // MARK: Lifecycle
 
-  private init() {}
+  init() {}
 
   // MARK: Public
 

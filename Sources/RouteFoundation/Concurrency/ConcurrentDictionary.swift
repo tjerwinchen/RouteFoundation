@@ -50,52 +50,52 @@ import Foundation
 ///       }
 ///     }
 @propertyWrapper
-final class ConcurrentDictionary<Key: Hashable, Value> {
+public final class ConcurrentDictionary<Key: Hashable, Value> {
   // MARK: Lifecycle
 
   /// Initialize a concurrent dictionary from a dictionary
-  init(wrappedValue: [Key: Value] = [:]) {
+  public init(wrappedValue: [Key: Value] = [:]) {
     self.unsafeDictionary = wrappedValue
   }
 
-  // MARK: Internal
+  // MARK: Public
 
   /// The wrapped value is the unsafe dictionary
-  var wrappedValue: [Key: Value] {
+  public var wrappedValue: [Key: Value] {
     unsafeDictionary
   }
 
   /// The projected concurrent dictionary
-  var projectedValue: ConcurrentDictionary {
+  public var projectedValue: ConcurrentDictionary {
     self
   }
 
   /// The first element of the collection.
-  var first: (key: Key, value: Value)? {
+  public var first: (key: Key, value: Value)? {
     concurrentLock.readLock(); defer { concurrentLock.unlock() }
     return unsafeDictionary.first
   }
 
   /// The position of the first element in a nonempty dictionary.
-  var startIndex: Dictionary<Key, Value>.Index {
+  public var startIndex: Dictionary<Key, Value>.Index {
     concurrentLock.readLock(); defer { concurrentLock.unlock() }
     return unsafeDictionary.startIndex
   }
 
   /// The dictionary’s “past the end” position—that is, the position one greater than the last valid subscript argument.
-  var endIndex: Dictionary<Key, Value>.Index {
+  public var endIndex: Dictionary<Key, Value>.Index {
     concurrentLock.readLock(); defer { concurrentLock.unlock() }
     return unsafeDictionary.endIndex
   }
 
   /// The number of key-value pairs in the dictionary.
-  var count: Int {
+  public var count: Int {
     concurrentLock.readLock(); defer { concurrentLock.unlock() }
     return unsafeDictionary.count
   }
 
   /// A Boolean value that indicates whether the dictionary is empty.
-  var isEmpty: Bool {
+  public var isEmpty: Bool {
     concurrentLock.readLock(); defer { concurrentLock.unlock() }
     return unsafeDictionary.isEmpty
   }
@@ -108,7 +108,7 @@ final class ConcurrentDictionary<Key: Hashable, Value> {
   /// - Parameter key: The key to find in the dictionary.
   /// - Returns: The value associated with `key` if `key` is in the dictionary;
   ///   otherwise, `nil`.
-  subscript(key: Key) -> Value? {
+  public subscript(key: Key) -> Value? {
     _read {
       concurrentLock.readLock(); defer { concurrentLock.unlock() }
       yield unsafeDictionary[key]
@@ -131,7 +131,7 @@ final class ConcurrentDictionary<Key: Hashable, Value> {
   /// - Returns: The value that was replaced, or `nil` if a new key-value pair
   ///   was added.
   @discardableResult
-  func updateValue(_ value: Value, forKey key: Key) -> Value? {
+  public func updateValue(_ value: Value, forKey key: Key) -> Value? {
     concurrentLock.writeLock(); defer { concurrentLock.unlock() }
     return unsafeDictionary.updateValue(value, forKey: key)
   }
@@ -145,7 +145,7 @@ final class ConcurrentDictionary<Key: Hashable, Value> {
   ///   underlying buffer. If you pass `true`, the operation preserves the
   ///   buffer capacity that the collection has, otherwise the underlying
   ///   buffer is released.  The default is `false`.
-  func removeAll(keepingCapacity keepCapacity: Bool = false) {
+  public func removeAll(keepingCapacity keepCapacity: Bool = false) {
     concurrentLock.writeLock(); defer { concurrentLock.unlock() }
     unsafeDictionary.removeAll(keepingCapacity: keepCapacity)
   }
