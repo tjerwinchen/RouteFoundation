@@ -1,4 +1,4 @@
-// UIKitExtension.swift
+// UIApplication+Extension.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -23,12 +23,18 @@
 
 import UIKit
 
-// MARK: - UIKitExtension
+extension UIApplication {
+  /// Returns the current application's top most view controller.
+  var topMostViewController: UIViewController? {
+    UIApplication.shared.windows
+      .filter(\.isKeyWindow)
+      .filter { windows in
+        windows.rootViewController != nil
+      }.first?.rootViewController?.topMostViewController
+  }
 
-protocol UIKitExtension {
-  /// The most top view controller
-  var topMostViewController: UIViewController? { get }
-
-  /// The navigation controller that is foreground of this view controller or view
-  var foregroundNavigationController: UINavigationController? { get }
+  /// The navigation controller that is foreground of this view controller
+  var foregroundNavigationController: UINavigationController? {
+    topMostViewController?.view.foregroundNavigationController
+  }
 }

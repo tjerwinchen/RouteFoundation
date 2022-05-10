@@ -1,4 +1,4 @@
-// UIViewController+UIKitExtension.swift
+// UIViewController+Extension.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -23,8 +23,8 @@
 
 import UIKit
 
-extension UIKitExtension where Self: UIViewController {
-  var topMostViewController: UIViewController? {
+extension UIViewController {
+  var topMostViewController: UIViewController {
     // presented view controller
     if let presentedViewController = presentedViewController {
       return presentedViewController.topMostViewController
@@ -46,13 +46,13 @@ extension UIKitExtension where Self: UIViewController {
 
     // UIPageController
     if let pageViewController = self as? UIPageViewController,
-       pageViewController.viewControllers?.count == 1
+       let firstPageViewController = pageViewController.viewControllers?.first
     {
-      return pageViewController.viewControllers?.first?.topMostViewController
+      return firstPageViewController.topMostViewController
     }
 
     // child view controller
-    for subview in view?.subviews ?? [] {
+    for subview in view.subviews {
       if let childViewController = subview.next as? UIViewController {
         return childViewController.topMostViewController
       }
@@ -60,12 +60,4 @@ extension UIKitExtension where Self: UIViewController {
 
     return self
   }
-
-  var foregroundNavigationController: UINavigationController? {
-    topMostViewController?.view.foregroundNavigationController
-  }
 }
-
-// MARK: - UIViewController + UIKitExtension
-
-extension UIViewController: UIKitExtension {}

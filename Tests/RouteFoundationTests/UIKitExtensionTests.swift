@@ -30,6 +30,17 @@ final class UIKitExtensionTests: XCTestCase {
   class HomeDetailViewController: UIViewController {}
   class ProfileViewController: UIViewController {}
   class ReminderViewController: UIViewController {}
+  class PageExampleViewController: UIViewController {}
+
+  class PageViewController: UIPageViewController {
+    let pageExampleViewController1 = PageExampleViewController()
+    let pageExampleViewController2 = PageExampleViewController()
+
+    override func viewDidLoad() {
+      super.viewDidLoad()
+      setViewControllers([pageExampleViewController1], direction: .forward, animated: false, completion: nil)
+    }
+  }
 
   lazy var window: UIWindow = {
     let window = UIWindow()
@@ -45,16 +56,18 @@ final class UIKitExtensionTests: XCTestCase {
   let homeViewController = HomeViewController()
   let homeDetailViewController = HomeDetailViewController()
   let profileViewController = ProfileViewController()
+  let pageViewController = PageViewController()
   let reminderViewController = ReminderViewController()
 
   override func setUp() {
     // Prepare a view hierarchy
     // window -> nav -> tabbar -> home    -> homeDetail
     //                         -> profile
+    //                         -> page
     //           nav -> Reminder
     super.setUp()
 
-    tabBarController.viewControllers = [homeViewController, profileViewController]
+    tabBarController.viewControllers = [homeViewController, profileViewController, pageViewController]
     rootNavigationController.pushViewController(homeDetailViewController, animated: false)
 
     window.rootViewController?.present(presentedNavigationController, animated: false)
@@ -62,23 +75,23 @@ final class UIKitExtensionTests: XCTestCase {
 
   func test_homeDetail() {
     XCTAssertEqual(homeDetailViewController.topMostViewController, homeDetailViewController)
-    XCTAssertEqual(homeDetailViewController.foregroundNavigationController, rootNavigationController)
+    XCTAssertEqual(homeDetailViewController.view.foregroundNavigationController, rootNavigationController)
   }
 
   func test_home() {
     XCTAssertEqual(homeViewController.topMostViewController, homeViewController)
-    XCTAssertEqual(homeViewController.foregroundNavigationController, rootNavigationController)
+    XCTAssertEqual(homeViewController.view.foregroundNavigationController, rootNavigationController)
   }
 
   func test_reminder() {
     XCTAssertEqual(reminderViewController.topMostViewController, reminderViewController)
-    XCTAssertEqual(reminderViewController.foregroundNavigationController, presentedNavigationController)
+    XCTAssertEqual(reminderViewController.view.foregroundNavigationController, presentedNavigationController)
   }
 
   func test_nav() {
-    XCTAssertEqual(rootNavigationController.foregroundNavigationController, rootNavigationController)
+    XCTAssertEqual(rootNavigationController.view.foregroundNavigationController, rootNavigationController)
     XCTAssertEqual(presentedNavigationController.topMostViewController, reminderViewController)
-    XCTAssertEqual(presentedNavigationController.foregroundNavigationController, presentedNavigationController)
+    XCTAssertEqual(presentedNavigationController.view.foregroundNavigationController, presentedNavigationController)
 
     tabBarController.selectedIndex = 0
     XCTAssertEqual(rootNavigationController.topMostViewController, homeDetailViewController)
@@ -89,11 +102,13 @@ final class UIKitExtensionTests: XCTestCase {
   }
 
   func test_tabbar() {
-    XCTAssertEqual(tabBarController.foregroundNavigationController, rootNavigationController)
+    XCTAssertEqual(tabBarController.view.foregroundNavigationController, rootNavigationController)
 
     tabBarController.selectedIndex = 0
     XCTAssertEqual(tabBarController.topMostViewController, homeViewController)
     tabBarController.selectedIndex = 1
     XCTAssertEqual(tabBarController.topMostViewController, profileViewController)
+    tabBarController.selectedIndex = 2
+    XCTAssertEqual(tabBarController.topMostViewController, pageViewController.pageExampleViewController1)
   }
 }
