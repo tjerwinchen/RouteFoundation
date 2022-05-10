@@ -69,7 +69,7 @@ function lint() {
 
 function podlint() {
   if ! which bundle &> /dev/null; then
-    printf "⚠️  You don't have SwiftLint installed locally.\n"
+    printf "⚠️  You don't have Bundler installed locally.\n"
     gem install bundler & bundle install
     if $VERBOSE; then
       bundle exec pod lib lint RouteFoundation.podspec --verbose
@@ -85,9 +85,46 @@ function podlint() {
   fi
 }
 
+function podspeclint() {
+  if ! which bundle &> /dev/null; then
+    printf "⚠️  You don't have Bundler installed locally.\n"
+    gem install bundler & bundle install
+    if $VERBOSE; then
+      bundle exec pod spec lint RouteFoundation.podspec --verbose
+    else
+      bundle exec pod spec lint RouteFoundation.podspec
+    fi
+  else
+    if $VERBOSE; then
+      bundle exec pod spec lint RouteFoundation.podspec --verbose
+    else
+      bundle exec pod spec lint RouteFoundation.podspec
+    fi
+  fi
+}
+
+function podpush() {
+  if ! which bundle &> /dev/null; then
+    printf "⚠️  You don't have Bundler installed locally.\n"
+    gem install bundler & bundle install
+    if $VERBOSE; then
+      bundle exec pod repo push RouteFoundation.podspec --verbose
+    else
+      bundle exec pod repo push RouteFoundation.podspec
+    fi
+  else
+    if $VERBOSE; then
+      bundle exec pod repo push RouteFoundation.podspec --verbose
+    else
+      bundle exec pod repo push RouteFoundation.podspec
+    fi
+  fi
+}
+
 function release() {
   if output=$(git status --untracked-files=no --porcelain) && [ -z "$output" ]; then
-    podlint
+    podspeclint
+    podpush
   else
     printf "⚠️  You have uncommitted changes.\n${output}\n"
   fi
@@ -125,5 +162,6 @@ if [[ $1 =~ ^(format|lint|check|podlint|release|generate|mockgen)$ ]]; then
 #  fi
 else
   echo "Invalid subcommand $1" >&2
+  echo "Only support format|lint|check|podlint|release|generate|mockgen"
   exit 1
 fi
