@@ -57,6 +57,8 @@ If you prefer not to use either of the aforementioned dependency managers, you c
 ## Usage
 
 ### Quick Start
+
+#### Define the route
 ```swift
 import RouteFoundation
 
@@ -85,14 +87,21 @@ enum AppRoute: String, Route {
     }
   }
 }
+```
 
+#### Navigate to destination view controller via route
+```swift
+import RouteFoundation
 // show/show-detail/push/present pages via routes
 AppRoute.home.show()
 AppRoute.home.showDetail()
 AppRoute.profile.push()
 AppRoute.profile.present()
+```
 
-// Optional: In SceneDelegate.swift, implement scene:openURLContexts
+#### Hanlde open url
+Optional: If we want to handle `openURL`, implement `scene(_:openURLContexts:)` in  SceneDelegate.swift
+```swift
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   //...
   
@@ -106,6 +115,29 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
   }
 }
+```
+
+Optional: If the app doesn't use SceneDelegate, we can implement `application(_:open:options:)` in AppDelegate.swift
+```swift
+class AppDelegate: UIResponder, UIApplicationDelegate {
+  ......
+  
+  func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+    
+    return RouteManager.shared.open(url: url)
+  }
+}
+``` 
+
+#### Handle it by `RouteManager`
+We can show, showDetail, push, present any view controller directly by using `RouteManager`
+```swift
+RouteManager.shared.show(for: "home?title=HOME&user=A5$B8DCD2313", context: homeViewModel)
+RouteManager.shared.showDetail(for: "home?title=HOME&user=A5$B8DCD2313", context: homeViewModel)
+RouteManager.shared.push(for: "home?title=HOME&user=A5$B8DCD2313", context: homeViewModel)
+RouteManager.shared.present(for: "home?title=HOME&user=A5$B8DCD2313", context: homeViewModel, completion: {
+  //do some thing after presented ......
+})
 ```
 
 ## License
