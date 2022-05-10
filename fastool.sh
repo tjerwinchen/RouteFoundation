@@ -108,25 +108,33 @@ function podpush() {
     printf "⚠️  You don't have Bundler installed locally.\n"
     gem install bundler & bundle install
     if $VERBOSE; then
-      bundle exec pod repo push RouteFoundation.podspec --verbose
+      bundle exec pod trunk push RouteFoundation.podspec --verbose
     else
-      bundle exec pod repo push RouteFoundation.podspec
+      bundle exec pod trunk push RouteFoundation.podspec
     fi
   else
     if $VERBOSE; then
-      bundle exec pod repo push RouteFoundation.podspec --verbose
+      bundle exec pod trunk push RouteFoundation.podspec --verbose
     else
-      bundle exec pod repo push RouteFoundation.podspec
+      bundle exec pod trunk push RouteFoundation.podspec
     fi
   fi
 }
 
+function is_repo_clean() {
+  output=$(git status --untracked-files=no --porcelain) && [ -z "$output" ]
+}
+
+function is_no_unpushed_commits() {
+  output=$(git cherry -v) && [ -z "$output" ]
+}
+
 function release() {
-  if output=$(git status --untracked-files=no --porcelain) && [ -z "$output" ]; then
+  if is_repo_clean && is_no_unpushed_commits; then
     podspeclint
     podpush
   else
-    printf "⚠️  You have uncommitted changes.\n${output}\n"
+    printf "⚠️  You have uncommitted changes or unpushed commits.\n${output}\n"
   fi
 }
 
