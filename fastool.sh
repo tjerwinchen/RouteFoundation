@@ -6,6 +6,7 @@ SWIFTFORMAT_FILE=~/.tooling/swiftformat/base
 SWIFTLINT_FILE=~/.tooling/swiftlint/base.yml
 VERBOSE=false
 OUTPUT=""
+VERSION=nil
 
 function parse_args() {
   while [[ $# -gt 0 ]]; do
@@ -16,6 +17,11 @@ function parse_args() {
       VERBOSE=true
       # Shift past argument since there's no value expected.
       shift
+      ;;
+    --version)
+      VERSION=$2
+      shift # past argument
+      shift # past value
       ;;
     # Unknown option.
     *)
@@ -129,9 +135,40 @@ function is_no_unpushed_commits() {
   output=$(git cherry -v) && [ -z "$output" ]
 }
 
+function is_tag_exist_locally() {
+  git rev-parse -q --verify "refs/tags/$1" >/dev/null;
+}
+
+function is_tag_exist_remotely() {
+  git ls-remote --exit-code --tags origin $1 >/dev/null;
+}
+
+function remove_tag_locally() {
+  git tag -d $1
+}
+
+function remove_tag_remotely() {
+  git push --delete origin $1
+}
+
+function tag() {
+  local tag=${VERSION}
+  if is_tag_exist_locally $tag; then
+    remove_tag_locally $tag
+  fi
+  if is_tag_exist_remotely $tag; then
+    remove_tag_remotely $tag
+  fi
+  
+  git tag -a ${tag} -m "Release version ${tag}"
+  git push origin ${tag}
+}
+
 function release() {
+  local version=${VERSION}
   if is_repo_clean && is_no_unpushed_commits; then
     podspeclint
+    tag ${version}
     podpush
   else
     printf "⚠️  You have uncommitted changes or unpushed commits.\n${output}\n"
@@ -170,6 +207,6 @@ if [[ $1 =~ ^(format|lint|check|podlint|release|generate|mockgen)$ ]]; then
 #  fi
 else
   echo "Invalid subcommand $1" >&2
-  echo "Only support format|lint|check|podlint|release|generate|mockgen"
+  echo "Only support format|lint|check|podlint|release|generate|mockgen|tag"
   exit 1
 fi
