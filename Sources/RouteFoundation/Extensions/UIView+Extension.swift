@@ -1,4 +1,4 @@
-// UIView+UIKitExtension.swift
+// UIView+Extension.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -23,26 +23,16 @@
 
 import UIKit
 
-extension UIKitExtension where Self: UIView {
+extension UIView {
   var foregroundNavigationController: UINavigationController? {
-    if let navCtrl = (next as? UIViewController)?.navigationController {
-      return navCtrl
+    if let navigationController = next as? UINavigationController {
+      return navigationController
+    } else if let navigationController = (next as? UIViewController)?.navigationController {
+      return navigationController
     }
 
-    for subview in subviews {
-      if let navCtrl = subview.foregroundNavigationController {
-        return navCtrl
-      }
-    }
-
-    return nil
-  }
-
-  var topMostViewController: UIViewController? {
-    (next as? UIViewController)?.topMostViewController
+    return subviews.first { view in
+      view.foregroundNavigationController != nil
+    }?.foregroundNavigationController
   }
 }
-
-// MARK: - UIView + UIKitExtension
-
-extension UIView: UIKitExtension {}
