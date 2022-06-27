@@ -21,24 +21,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import Home
+import Product
 import RouteFoundation
 import UIKit
 
 enum AppRoute: String, Route {
-  case root
-  case pageShow
-  case pageShowDetail
-  case pagePush
-  case pagePresent
+  case home
+  case product
 
   // MARK: Internal
 
   var viewControllerProvider: RouteViewControllerProvider {
-    { arg in
-      let (_, params, _) = arg
-      let viewController = RouteSampleViewController()
-      viewController.title = params["title"]
-      return viewController
+    switch self {
+    case .home:
+      return { arg in
+        let (_, params, _) = arg
+        let title = params["title"] ?? ""
+        return HomeComponent(title: title).viewController
+      }
+    case .product:
+      return { arg in
+        let (_, params, _) = arg
+        let title = params["title"] ?? ""
+        guard let urlString = params["image_url"], let imageUrl = URL(string: urlString) else {
+          return UIViewController()
+        }
+        return ProductComponent(title: title, imageUrl: imageUrl).viewController
+      }
     }
   }
 }

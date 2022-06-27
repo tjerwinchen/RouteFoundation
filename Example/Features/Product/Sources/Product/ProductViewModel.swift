@@ -1,4 +1,4 @@
-// RouteManager.swift
+// ProductViewModel.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -21,17 +21,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import ResolverFoundation
-import UIKit
+import Combine
+import Foundation
+import SwiftUI
 
-public final class RouteManager: RouteManaging {
+class ProductViewModel: ObservableObject {
   // MARK: Lifecycle
 
-  init() {}
+  init(title: String, imageUrl: URL) {
+    self.title = title
+    self.imageUrl = imageUrl
 
-  // MARK: Public
+    bindData()
+  }
 
-  public static let shared = RouteManager()
+  // MARK: Internal
 
-  public let resolver = Resolver()
+  var cancellables = Set<AnyCancellable>()
+
+  @Published var title: String
+  @Published var imageUrl: URL
+
+  @Published var image = Image(systemName: "keyboard")
+
+  lazy var session: URLSession = {
+    let configuration: URLSessionConfiguration = .default
+    configuration.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+    return URLSession(configuration: configuration)
+  }()
+
+  func bindData() {
+    $imageUrl
+      .flatMap { url in
+        self.session.dataTaskPublisher(for: url)
+          .replaceError(with: (data: Data(), response: URLResponse()))
+      }
+      .compactMap { data, _ -> UIImage in
+        UIImage(data: data) ?? UIImage()
+      }
+      .compactMap { image in
+        Image(uiImage: image)
+      }
+      .receive(on: DispatchQueue.main)
+      .assign(to: \.image, on: self)
+      .store(in: &cancellables)
+  }
 }

@@ -1,4 +1,4 @@
-// Resolver.swift
+// HomeComponent.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -21,38 +21,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Foundation
+import UIKit
 
-// MARK: - Resolver
-
-/// A lightweight resolver for DI
-public final class Resolver {
+public struct HomeComponent {
   // MARK: Lifecycle
 
-  init() {}
+  public init(title: String) {
+    let viewModel = HomeViewModel(title: title)
+    self.viewController = HomeViewController(viewModel: viewModel)
+  }
 
   // MARK: Public
 
-  public static let shared = Resolver()
-
-  public func add<T: ResolverFactory>(identifier: String, resolverFactory: T) {
-    $resolverFactories.updateValue(resolverFactory, forKey: identifier)
-  }
-
-  public func factory<T: ResolverFactory>(_ type: T.Type = T.self, for identifier: String) -> T? {
-    $resolverFactories[identifier] as? T
-  }
-
-  public func resolve<T: ResolverFactory>(_ type: T.Type = T.self, identifier: String, args: T.Args) throws -> T.Service {
-    guard let resolverFactory: T = factory(for: identifier) else {
-      throw ResolverError.notFound(factoryKey: identifier)
-    }
-
-    return resolverFactory.resolve(args: args)
-  }
-
-  // MARK: Internal
-
-  @ConcurrentDictionary
-  var resolverFactories: [String: Any] = [:]
+  public private(set) var viewController: UIViewController
 }

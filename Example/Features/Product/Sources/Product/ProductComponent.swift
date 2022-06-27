@@ -1,4 +1,4 @@
-// ResolverFactory.swift
+// ProductComponent.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -21,35 +21,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Foundation
+import SwiftUI
 
-// MARK: - ResolverFactory
-
-public protocol ResolverFactory {
-  associatedtype Args
-  associatedtype Service
-
-  func resolve(args: Args) -> Service
-
-  var closure: (Args) -> Service { get }
-}
-
-extension ResolverFactory {
-  public func resolve(args: Args) -> Service {
-    closure(args)
-  }
-}
-
-// MARK: - ResolverFactoryImpl
-
-public class ResolverFactoryImpl<Args, Service>: ResolverFactory {
+public struct ProductComponent {
   // MARK: Lifecycle
 
-  public init(service: Service.Type = Service.self, args: Args.Type = Args.self, closure: @escaping (Args) -> Service) {
-    self.closure = closure
+  public init(title: String, imageUrl: URL) {
+    let viewModel = ProductViewModel(title: title, imageUrl: imageUrl)
+    self.viewController = UIHostingController(rootView: ProductView(viewModel: viewModel))
   }
 
   // MARK: Public
 
-  public let closure: (Args) -> Service
+  public private(set) var viewController: UIViewController
 }

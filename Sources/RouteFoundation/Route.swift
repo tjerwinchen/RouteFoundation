@@ -21,6 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import ResolverFoundation
 import UIKit
 
 /// (_ url: URLConvertible, queryParameters: [String: String], context: Any?)

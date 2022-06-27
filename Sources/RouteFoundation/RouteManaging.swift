@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 import OSLog
+import ResolverFoundation
 import UIKit
 
 // MARK: - RouteManaging

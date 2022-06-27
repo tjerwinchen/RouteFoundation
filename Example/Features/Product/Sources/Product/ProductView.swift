@@ -1,4 +1,4 @@
-// ConcurrentLock.swift
+// ProductView.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -21,54 +21,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Foundation
+import SwiftUI
 
-// MARK: - ConcurrentLocking
+// MARK: - ProductView
 
-protocol ConcurrentLocking: AnyObject {
-  var rwlock: pthread_rwlock_t { get set }
-
-  /// Unlocking
-  func unlock()
-
-  /// Locking for writing
-  func writeLock()
-
-  /// Locking for reading
-  func readLock()
-}
-
-extension ConcurrentLocking {
-  func unlock() {
-    pthread_rwlock_unlock(&rwlock)
-  }
-
-  func writeLock() {
-    pthread_rwlock_wrlock(&rwlock)
-  }
-
-  /// Locking for reading
-  func readLock() {
-    pthread_rwlock_rdlock(&rwlock)
-  }
-}
-
-// MARK: - ConcurrentLock
-
-final class ConcurrentLock: ConcurrentLocking {
+public struct ProductView: View {
   // MARK: Lifecycle
 
-  /// Initializes a newly allocated ConcurrentLock object.
-  init() {
-    pthread_rwlock_init(&rwlock, nil)
+  init(viewModel: ProductViewModel) {
+    self.viewModel = viewModel
   }
 
-  deinit {
-    pthread_rwlock_destroy(&rwlock)
+  // MARK: Public
+
+  public var body: some View {
+    VStack {
+      Text(viewModel.title)
+
+      viewModel.image
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+    }
   }
 
   // MARK: Internal
 
-  // A pthread read-write lock object.
-  var rwlock = pthread_rwlock_t()
+  @ObservedObject
+  var viewModel: ProductViewModel
 }
+
+#if DEBUG
+
+  struct HomeView_Previews: PreviewProvider {
+    static let viewModel = ProductViewModel(title: "Title", imageUrl: URL(string: "https://www.apple.com/newsroom/images/product/ipad/standard/Apple-iPad-Air-Magic-Keyboard-220308_big_carousel.jpg.slideshow-large_2x.jpg")!)
+
+    static var previews: some View {
+      ProductView(viewModel: Self.viewModel)
+    }
+  }
+
+#endif

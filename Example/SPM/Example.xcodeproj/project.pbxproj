@@ -8,12 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		03F7CFB89AD8396A54AB7749 /* AppRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3CF09A32766E1D2782664C /* AppRoute.swift */; };
+		37E34FE3E57EBEEF6158D7F3 /* Home in Frameworks */ = {isa = PBXBuildFile; productRef = BBEAFDD623D9575E261D1143 /* Home */; };
 		8700C35230C4957536282902 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE4DC01E8954460364BD6C3 /* AppDelegate.swift */; };
 		8FF59A0E95631F7DE1BF61E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 211B2464C4C80CB295FB9B91 /* Assets.xcassets */; };
 		AC321D2D5E0568D4D7900C4B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E01B2C1B14EF4913CF4DA2B3 /* LaunchScreen.storyboard */; };
 		D306CE11F056CAF7314E7EBE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC936B92FF215957484CCD29 /* SceneDelegate.swift */; };
 		D449BAA2E7CACD18F7697535 /* RouteFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 52E164B755362A67DD9A98BD /* RouteFoundation */; };
-		E46B0F886B121F2C2A57D885 /* RouteSampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46E4E6D575E54546A1B133A /* RouteSampleViewController.swift */; };
+		DA476669DB1F2FA00D62EB14 /* Product in Frameworks */ = {isa = PBXBuildFile; productRef = A78E62E1D8592515B3FD00DA /* Product */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,9 +22,10 @@
 		211B2464C4C80CB295FB9B91 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		56D57215D73C91EAED8869FB /* RouteFoundationExample.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = RouteFoundationExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		95850E28C309AFF9F9A0F4E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		9958044D957DCF4285317B6B /* Home */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Home; path = ../Features/Home; sourceTree = SOURCE_ROOT; };
 		ABA820885D38A316415497A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AC936B92FF215957484CCD29 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		D46E4E6D575E54546A1B133A /* RouteSampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSampleViewController.swift; sourceTree = "<group>"; };
+		BA59A5214C8FD5C272E3E09E /* Product */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Product; path = ../Features/Product; sourceTree = SOURCE_ROOT; };
 		DAE4DC01E8954460364BD6C3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EF29F4ACCDF4E022DF7F0694 /* RouteFoundation */ = {isa = PBXFileReference; lastKnownFileType = folder; name = RouteFoundation; path = ../..; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -34,6 +36,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D449BAA2E7CACD18F7697535 /* RouteFoundation in Frameworks */,
+				DA476669DB1F2FA00D62EB14 /* Product in Frameworks */,
+				37E34FE3E57EBEEF6158D7F3 /* Home in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +47,8 @@
 		12B9A666C278AB8CB5B6FA33 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				9958044D957DCF4285317B6B /* Home */,
+				BA59A5214C8FD5C272E3E09E /* Product */,
 				EF29F4ACCDF4E022DF7F0694 /* RouteFoundation */,
 			);
 			name = Packages;
@@ -75,7 +81,6 @@
 				211B2464C4C80CB295FB9B91 /* Assets.xcassets */,
 				ABA820885D38A316415497A1 /* Info.plist */,
 				E01B2C1B14EF4913CF4DA2B3 /* LaunchScreen.storyboard */,
-				D46E4E6D575E54546A1B133A /* RouteSampleViewController.swift */,
 				AC936B92FF215957484CCD29 /* SceneDelegate.swift */,
 			);
 			name = RouteFoundation;
@@ -101,6 +106,8 @@
 			name = RouteFoundationExample;
 			packageProductDependencies = (
 				52E164B755362A67DD9A98BD /* RouteFoundation */,
+				A78E62E1D8592515B3FD00DA /* Product */,
+				BBEAFDD623D9575E261D1143 /* Home */,
 			);
 			productName = RouteFoundationExample;
 			productReference = 56D57215D73C91EAED8869FB /* RouteFoundationExample.app */;
@@ -120,7 +127,7 @@
 				};
 			};
 			buildConfigurationList = 36FC72E69D906F48675C62BF /* Build configuration list for PBXProject "Example" */;
-			compatibilityVersion = "Xcode 10.0";
+			compatibilityVersion = "Xcode 11.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -176,7 +183,6 @@
 			files = (
 				8700C35230C4957536282902 /* AppDelegate.swift in Sources */,
 				03F7CFB89AD8396A54AB7749 /* AppRoute.swift in Sources */,
-				E46B0F886B121F2C2A57D885 /* RouteSampleViewController.swift in Sources */,
 				D306CE11F056CAF7314E7EBE /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -491,6 +497,14 @@
 		52E164B755362A67DD9A98BD /* RouteFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RouteFoundation;
+		};
+		A78E62E1D8592515B3FD00DA /* Product */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Product;
+		};
+		BBEAFDD623D9575E261D1143 /* Home */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Home;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

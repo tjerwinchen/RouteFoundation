@@ -1,4 +1,4 @@
-// ResolverError.swift
+// HomeViewModel.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -21,21 +21,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import Combine
 import Foundation
 
-// MARK: - ResolverError
+class HomeViewModel: ObservableObject {
+  // MARK: Lifecycle
 
-public enum ResolverError: Error {
-  case notFound(factoryKey: String)
-}
-
-// MARK: CustomStringConvertible
-
-extension ResolverError: CustomStringConvertible {
-  public var description: String {
-    switch self {
-    case let .notFound(factoryKey):
-      return "The factory \(factoryKey) not found."
-    }
+  init(title: String) {
+    self.title = title
   }
+
+  // MARK: Internal
+
+  @Published var title: String
 }

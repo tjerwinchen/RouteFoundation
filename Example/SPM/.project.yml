@@ -13,16 +13,24 @@ settings:
 packages:
   RouteFoundation:
     path: ../../
+  Product:
+    path: ../Features/Product
+  Home:
+    path: ../Features/Home
 
 targets:
 
   RouteFoundationExample:
     type: application
     platform: iOS
-    sources: [../../RouteFoundation]
+    sources: [
+      ../../RouteFoundation
+    ]
     scheme: {} # Generates default scheme
     dependencies:
       - package: RouteFoundation
+      - package: Product
+      - package: Home
     postCompileScripts:
     - script: "\
 SDKROOT=(xcrun --sdk macosx --show-sdk-path)\n\

@@ -21,6 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import Product
 import RouteFoundation
 import UIKit
 
@@ -39,7 +40,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     window = UIWindow(windowScene: windowScene)
 
-    window?.rootViewController = UINavigationController(rootViewController: AppRoute.root.viewController(queryParameters: ["title": "Root"]))
+//    window?.rootViewController = UINavigationController(rootViewController: AppRoute.root.viewController(queryParameters: ["title": "Root"]))
+
+    window?.rootViewController = UINavigationController(rootViewController: AppRoute.product.viewController(queryParameters: [
+      "title": "Product",
+      "image_url": "https://www.apple.com/newsroom/images/product/ipad/standard/Apple-iPad-Air-Magic-Keyboard-220308_big_carousel.jpg.slideshow-large_2x.jpg",
+    ]))
 
     window?.makeKeyAndVisible()
   }

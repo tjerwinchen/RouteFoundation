@@ -8,7 +8,7 @@ Pod::Spec.new do |spec|
   spec.homepage     = "https://github.com/tjerwinchen/#{spec.name}"
   spec.license      = { :type => "MIT", :file => "LICENSE" }
   spec.author             = { "Theo Chen" => "theo.chen@codebase.codes" }
-  spec.social_media_url   = "https://twitter.com/zhecui"
+  spec.social_media_url   = "https://twitter.com/zhecuichen"
 
   spec.swift_version = '5.6'
   spec.ios.deployment_target = "12.0"

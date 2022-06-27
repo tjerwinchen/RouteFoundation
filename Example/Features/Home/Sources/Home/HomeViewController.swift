@@ -1,4 +1,4 @@
-// RouteSampleViewController.swift
+// HomeViewController.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -21,7 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import RouteFoundation
+import Combine
 import UIKit
 
 // protocol Routing where Self: UIViewController {
@@ -46,13 +46,22 @@ import UIKit
 //  }
 // }
 
-class RouteSampleViewController: UITableViewController {
-  var routes = [
-    AppRoute.pageShow,
-    AppRoute.pageShowDetail,
-    AppRoute.pagePush,
-    AppRoute.pagePresent,
-  ]
+class HomeViewController: UITableViewController {
+  // MARK: Lifecycle
+
+  init(viewModel: HomeViewModel) {
+    self.viewModel = viewModel
+    super.init(style: .plain)
+  }
+
+  @available(*, unavailable)
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  // MARK: Internal
+
+  var viewModel: HomeViewModel
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -63,30 +72,18 @@ class RouteSampleViewController: UITableViewController {
   }
 
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    routes.count
+    4
   }
 
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-    cell.textLabel?.text = routes[indexPath.row].rawValue
+    cell.textLabel?.text = "routes[indexPath.row].rawValue"
     cell.accessoryType = .disclosureIndicator
     return cell
   }
 
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
-    let route = routes[indexPath.row]
-    switch route {
-    case .pageShow:
-      route.show(queryParameters: ["title": "Show"])
-    case .pageShowDetail:
-      route.showDetail(queryParameters: ["title": "Show Detail"], wrapIn: UINavigationController.self)
-    case .pagePush:
-      route.push(queryParameters: ["title": "Push"])
-    case .pagePresent:
-      route.present(queryParameters: ["title": "Present"], wrapIn: UINavigationController.self)
-    default:
-      break
-    }
+    // route.show(queryParameters: ["title": "Show"])
   }
 }
