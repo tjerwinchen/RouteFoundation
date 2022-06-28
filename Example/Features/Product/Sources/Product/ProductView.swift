@@ -21,38 +21,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import RouteFoundation
 import SwiftUI
 
 // MARK: - ProductView
 
-public struct ProductView: View {
+struct ProductView: View {
   // MARK: Lifecycle
 
   init(viewModel: ProductViewModel) {
     self.viewModel = viewModel
   }
 
-  // MARK: Public
-
-  public var body: some View {
-    VStack {
-      Text(viewModel.title)
-
-      viewModel.image
-        .resizable()
-        .aspectRatio(contentMode: .fit)
-    }
-  }
-
   // MARK: Internal
 
   @ObservedObject
   var viewModel: ProductViewModel
+
+  var body: some View {
+    VStack {
+      Text(viewModel.title)
+
+      NavigationLink {
+        RouteManager.shared
+          .view(for: "home?title=Title1")
+      } label: {
+        viewModel.image
+          .resizable()
+          .aspectRatio(contentMode: .fit)
+      }
+
+      RouteManager.shared
+        .view(for: "home?title=Title2")
+    }
+  }
 }
 
 #if DEBUG
 
-  struct HomeView_Previews: PreviewProvider {
+  struct ProductView_Previews: PreviewProvider {
+    // swiftlint:disable force_unwrapping
     static let viewModel = ProductViewModel(title: "Title", imageUrl: URL(string: "https://www.apple.com/newsroom/images/product/ipad/standard/Apple-iPad-Air-Magic-Keyboard-220308_big_carousel.jpg.slideshow-large_2x.jpg")!)
 
     static var previews: some View {

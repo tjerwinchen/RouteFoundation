@@ -3,22 +3,26 @@
 import PackageDescription
 
 let package = Package(
-  name: "Product",
-  platforms: [.iOS(.v13), .watchOS(.v6)],
+  name: "Root",
+  platforms: [.iOS(.v13)],
   products: [
     .library(
-      name: "Product",
-      targets: ["Product"]
+      name: "Root",
+      targets: ["Root"]
     ),
   ],
   dependencies: [
     .package(name: "RouteFoundation", path: "../../../"),
+    .package(name: "Home", path: "../Home"),
+    .package(name: "Product", path: "../Product"),
   ],
   targets: [
     .target(
-      name: "Product",
+      name: "Root",
       dependencies: [
         .product(name: "RouteFoundation", package: "RouteFoundation"),
+        .product(name: "Home", package: "Home"),
+        .product(name: "Product", package: "Product"),
       ]
     ),
   ]

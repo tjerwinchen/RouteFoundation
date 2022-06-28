@@ -23,7 +23,13 @@
 
 import OSLog
 import ResolverFoundation
+import SwiftUI
 import UIKit
+
+extension String {
+  fileprivate static let http = "http"
+  fileprivate static let https = "https"
+}
 
 // MARK: - RouteManaging
 
@@ -38,6 +44,10 @@ public protocol RouteManaging: AnyObject {
 
   /// view controller for a given url
   func viewController(for url: URLConvertible, context: Any?) -> UIViewController?
+
+  /// any view for a given url
+  @available(iOS 13.0, *)
+  func view(for url: URLConvertible, context: Any?) -> AnyView?
 
   /// open a new view controller for a given url
   func open(url: URLConvertible) -> Bool
@@ -63,7 +73,7 @@ public protocol RouteManaging: AnyObject {
 
 extension RouteManaging {
   func identifier(from url: URLConvertible, type: Any.Type) -> String? {
-    guard let urlPattern = url.urlValue?.path.trimmingCharacters(in: CharacterSet(charactersIn: "/")) else {
+    guard let urlPattern = [String.http, String.https].contains(url.urlValue?.scheme) ? .http : url.urlValue?.path.trimmingCharacters(in: CharacterSet(charactersIn: "/")) else {
       return nil
     }
 
@@ -79,6 +89,16 @@ extension RouteManaging {
     }
 
     let resolverFactory = ResolverFactoryImpl(closure: viewControllerProvider)
+    resolver.add(identifier: identifier, resolverFactory: resolverFactory)
+  }
+
+  @available(iOS 13, *)
+  public func register(pattern: URLConvertible, viewProvider: @escaping RouteViewProvider) {
+    guard let identifier = identifier(from: pattern, type: RouteViewProvider.self) else {
+      return
+    }
+
+    let resolverFactory = ResolverFactoryImpl(closure: viewProvider)
     resolver.add(identifier: identifier, resolverFactory: resolverFactory)
   }
 
@@ -104,6 +124,22 @@ extension RouteManaging {
       if #available(iOS 10.0, *) {
         os_log("%@", error.localizedDescription)
       }
+      return nil
+    }
+  }
+
+  @available(iOS 13.0, *)
+  public func view(for url: URLConvertible, context: Any? = nil) -> AnyView? {
+    guard let identifier = identifier(from: url, type: RouteViewProvider.self) else {
+      return nil
+    }
+
+    let parameter: (url: URLConvertible, parameters: [String: String], context: Any?) = (url, url.queryParameters, context)
+
+    do {
+      return try resolver.resolve(ViewResolverFactory.self, identifier: identifier, args: parameter)
+    } catch {
+      os_log("%@", error.localizedDescription)
       return nil
     }
   }

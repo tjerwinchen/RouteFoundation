@@ -1,4 +1,4 @@
-// AppRoute.swift
+// ProductRoute.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -21,34 +21,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Home
-import Product
 import RouteFoundation
+import SwiftUI
 import UIKit
 
-enum AppRoute: String, Route {
-  case home
+public enum ProductRoute: String, Route {
   case product
 
-  // MARK: Internal
+  // MARK: Public
 
-  var viewControllerProvider: RouteViewControllerProvider {
-    switch self {
-    case .home:
-      return { arg in
-        let (_, params, _) = arg
-        let title = params["title"] ?? ""
-        return HomeComponent(title: title).viewController
+  public var viewControllerProvider: RouteViewControllerProvider {
+    { arg in
+      let (_, params, _) = arg
+      let title = params["title"] ?? ""
+      guard let urlString = params["image_url"], let imageUrl = URL(string: urlString) else {
+        return UIViewController()
       }
-    case .product:
-      return { arg in
-        let (_, params, _) = arg
-        let title = params["title"] ?? ""
-        guard let urlString = params["image_url"], let imageUrl = URL(string: urlString) else {
-          return UIViewController()
-        }
-        return ProductComponent(title: title, imageUrl: imageUrl).viewController
+      return ProductComponent(title: title, imageUrl: imageUrl).viewController
+    }
+  }
+
+  @available(iOS 13, *)
+  public var viewProvider: RouteViewProvider {
+    { arg in
+      let (_, params, _) = arg
+      let title = params["title"] ?? ""
+      guard let urlString = params["image_url"], let imageUrl = URL(string: urlString) else {
+        return AnyView(EmptyView())
       }
+      return ProductComponent(title: title, imageUrl: imageUrl).view
     }
   }
 }

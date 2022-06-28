@@ -1,4 +1,4 @@
-// HomeViewModel.swift
+// Category.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -21,19 +21,56 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Combine
-import Foundation
+import UIKit
 
-public class HomeViewModel: ObservableObject {
+// MARK: - Category
+
+class Category: Hashable {
   // MARK: Lifecycle
 
-  init(title: String, categories: [Category]) {
+  init(title: String, contents: [Content]) {
     self.title = title
-    self.categories = categories
+    self.contents = contents
   }
 
   // MARK: Internal
 
-  @Published var title: String
-  @Published var categories: [Category]
+  var id = UUID()
+  var title: String
+  var contents: [Content]
+
+  static func == (lhs: Category, rhs: Category) -> Bool {
+    lhs.id == rhs.id
+  }
+
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
+}
+
+// MARK: - Content
+
+class Content: Hashable {
+  // MARK: Lifecycle
+
+  init(title: String, thumbnail: URL? = nil, link: URL?) {
+    self.title = title
+    self.thumbnail = thumbnail
+    self.link = link
+  }
+
+  // MARK: Internal
+
+  var id = UUID()
+  var title: String
+  var thumbnail: URL?
+  var link: URL?
+
+  static func == (lhs: Content, rhs: Content) -> Bool {
+    lhs.id == rhs.id
+  }
+
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
 }

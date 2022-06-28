@@ -12,11 +12,14 @@ let package = Package(
     ),
   ],
   dependencies: [
+    .package(name: "RouteFoundation", path: "../../../"),
   ],
   targets: [
     .target(
       name: "Home",
-      dependencies: []
+      dependencies: [
+        .product(name: "RouteFoundation", package: "RouteFoundation"),
+      ]
     ),
   ]
 )

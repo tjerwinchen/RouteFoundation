@@ -13,10 +13,13 @@ let package = Package(
     .package(path: "../ConcurrencyFoundation"),
   ],
   targets: [
-    .target(name: "RouteFoundation", dependencies: [
-      .product(name: "ResolverFoundation", package: "ResolverFoundation"),
-      .product(name: "ConcurrencyFoundation", package: "ConcurrencyFoundation"),
-    ]),
+    .target(
+      name: "RouteFoundation",
+      dependencies: [
+        .product(name: "ResolverFoundation", package: "ResolverFoundation"),
+        .product(name: "ConcurrencyFoundation", package: "ConcurrencyFoundation"),
+      ]
+    ),
     .testTarget(name: "RouteFoundationTests", dependencies: [
       .target(name: "RouteFoundation"),
     ]),

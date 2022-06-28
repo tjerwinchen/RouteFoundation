@@ -21,17 +21,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import ResolverFoundation
+import RouteFoundation
 import SwiftUI
 
-public struct ProductComponent {
+public class ProductComponent {
   // MARK: Lifecycle
 
   public init(title: String, imageUrl: URL) {
     let viewModel = ProductViewModel(title: title, imageUrl: imageUrl)
     self.viewController = UIHostingController(rootView: ProductView(viewModel: viewModel))
+    self.view = AnyView(ProductView(viewModel: viewModel))
   }
 
   // MARK: Public
 
-  public private(set) var viewController: UIViewController
+  public private(set) var viewController = UIViewController()
+
+  public private(set) var view = AnyView(EmptyView())
+
+  // MARK: Internal
+
+  var routeManager: RouteManager {
+    (try? Resolver.shared.resolve(ResolverFactoryImpl<Void, RouteManager>.self, identifier: "\(String(describing: Self.self)).\(#function)", args: ())) ?? RouteManager.shared
+  }
 }

@@ -13,10 +13,12 @@ settings:
 packages:
   RouteFoundation:
     path: ../../
-  Product:
-    path: ../Features/Product
+  Root:
+    path: ../Features/Root
   Home:
     path: ../Features/Home
+  Product:
+    path: ../Features/Product
 
 targets:
 
@@ -24,15 +26,16 @@ targets:
     type: application
     platform: iOS
     sources: [
-      ../../RouteFoundation
+      ../App
     ]
     scheme: {} # Generates default scheme
     dependencies:
       - package: RouteFoundation
-      - package: Product
+      - package: Root
       - package: Home
+      - package: Product
     postCompileScripts:
-    - script: "\
+      - script: "\
 SDKROOT=(xcrun --sdk macosx --show-sdk-path)\n\
 SWIFTLINT_YML=$HOME/.tooling/swiftlint/base.yml\n\
 PATH=/opt/homebrew/bin:$PATH\n\
@@ -46,6 +49,9 @@ else\n\
   exit 0\n\
 fi\
 "
+        name: Run Swiftlint
+        outputFiles:
+          - $(DERIVED_FILE_DIR)/swiftling.log
     settings:
       groups:
         - BaseTargetSetting

@@ -1,4 +1,4 @@
-// HomeViewModel.swift
+// RootRoute.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -21,19 +21,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Combine
-import Foundation
+import Home
+import Product
+import RouteFoundation
+import SafariServices
+import SwiftUI
+import UIKit
 
-public class HomeViewModel: ObservableObject {
-  // MARK: Lifecycle
+public enum RootRoute: String, Route {
+  case root
+  case http
 
-  init(title: String, categories: [Category]) {
-    self.title = title
-    self.categories = categories
+  // MARK: Public
+
+  public var viewControllerProvider: RouteViewControllerProvider {
+    switch self {
+    case .root:
+      return HomeRoute.home.viewControllerProvider
+    case .http:
+      return { args in
+        let (url, _, _) = args
+        if let url = url.urlValue {
+          return SFSafariViewController(url: url)
+        } else {
+          return UIViewController()
+        }
+      }
+    }
   }
 
-  // MARK: Internal
-
-  @Published var title: String
-  @Published var categories: [Category]
+  @available(iOS 13, *)
+  public var viewProvider: RouteViewProvider {
+    HomeRoute.home.viewProvider
+  }
 }

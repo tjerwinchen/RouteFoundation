@@ -1,4 +1,4 @@
-// HomeViewModel.swift
+// RootComponent.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -21,19 +21,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Combine
 import Foundation
+import Home
+import Product
+import ResolverFoundation
+import RouteFoundation
 
-public class HomeViewModel: ObservableObject {
+// MARK: - RootComponent
+
+public class RootComponent {
   // MARK: Lifecycle
 
-  init(title: String, categories: [Category]) {
-    self.title = title
-    self.categories = categories
+  public init() {}
+
+  // MARK: Public
+
+  public var routeManager: RouteManager {
+    RouteManager.shared
   }
+}
 
-  // MARK: Internal
+extension RootComponent {
+  public static func register() {
+    RootRoute.registerAll()
+    HomeRoute.registerAll()
+    ProductRoute.registerAll()
 
-  @Published var title: String
-  @Published var categories: [Category]
+    let rootComponent = RootComponent()
+
+    Resolver.shared.add(identifier: "HomeComponent.routeManager", resolverFactory: ResolverFactoryImpl {
+      rootComponent.routeManager
+    })
+
+    Resolver.shared.add(identifier: "ProductComponent.routeManager", resolverFactory: ResolverFactoryImpl {
+      rootComponent.routeManager
+    })
+  }
 }

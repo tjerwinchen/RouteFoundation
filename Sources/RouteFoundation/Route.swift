@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 import ResolverFoundation
+import SwiftUI
 import UIKit
 
 /// (_ url: URLConvertible, queryParameters: [String: String], context: Any?)
@@ -30,6 +31,12 @@ public typealias ViewControllerResolverFactory = ResolverFactoryImpl<(url: URLCo
 public typealias URLOpenHandlerResolverFactory = ResolverFactoryImpl<(url: URLConvertible, parameters: [String: String]), Bool>
 
 public typealias RouteViewControllerProvider = (ViewControllerResolverFactory.Args) -> ViewControllerResolverFactory.Service
+
+@available(iOS 13, *)
+public typealias ViewResolverFactory = ResolverFactoryImpl<(url: URLConvertible, parameters: [String: String], context: Any?), AnyView?>
+
+@available(iOS 13, *)
+public typealias RouteViewProvider = (ViewResolverFactory.Args) -> ViewResolverFactory.Service
 
 /// (_ url: URLConvertible, queryParameters: [String: String])
 public typealias RouteURLOpenHandlerProvider = ((url: URLConvertible, parameters: [String: String])) -> Bool
@@ -44,6 +51,10 @@ public protocol Route: CaseIterable, RawRepresentable where RawValue == String {
 
   /// view cotroller provider for the route
   var viewControllerProvider: RouteViewControllerProvider { get }
+
+  /// view provider for the route
+  @available(iOS 13, *)
+  var viewProvider: RouteViewProvider { get }
 
   /// url open hanlder for the route
   var urlOpenHandlerProvider: RouteURLOpenHandlerProvider { get }
@@ -67,6 +78,9 @@ extension Route {
   public static func registerAll() {
     allCases.forEach { item in
       RouteManager.shared.register(pattern: item.urlPattern, viewControllerProvider: item.viewControllerProvider)
+      if #available(iOS 13, *) {
+        RouteManager.shared.register(pattern: item.urlPattern, viewProvider: item.viewProvider)
+      }
       RouteManager.shared.register(pattern: item.urlPattern, urlOpenHandlerProvider: item.urlOpenHandlerProvider)
     }
   }

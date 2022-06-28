@@ -1,4 +1,4 @@
-// HomeViewModel.swift
+// HomeView.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -21,19 +21,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Combine
-import Foundation
+import RouteFoundation
+import SwiftUI
 
-public class HomeViewModel: ObservableObject {
+// MARK: - HomeView
+
+struct HomeView: UIViewControllerRepresentable {
   // MARK: Lifecycle
 
-  init(title: String, categories: [Category]) {
-    self.title = title
-    self.categories = categories
+  init(viewModel: HomeViewModel, routeManager: RouteManager) {
+    self.viewModel = viewModel
+    self.routeManager = routeManager
   }
 
   // MARK: Internal
 
-  @Published var title: String
-  @Published var categories: [Category]
+  var viewModel: HomeViewModel
+  var routeManager: RouteManager
+
+  func updateUIViewController(_ uiViewController: HomeViewController, context: Context) {
+    print(#function)
+  }
+
+  func makeUIViewController(context: Context) -> HomeViewController {
+    HomeViewController(viewModel: viewModel, routeManager: routeManager)
+  }
 }

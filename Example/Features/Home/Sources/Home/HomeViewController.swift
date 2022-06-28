@@ -22,36 +22,18 @@
 // THE SOFTWARE.
 
 import Combine
+import RouteFoundation
 import UIKit
 
-// protocol Routing where Self: UIViewController {
-//  func setup(url: URLConvertible, queryParameters: [String: String], context: Any?)
-// }
-//
-// extension RouteSampleTwoViewController {
-//
-//  convenience init(url: URLConvertible, queryParameters: [String: String], context: Any?) {
-//    self.init()
-//    self.setup(url: url, queryParameters: queryParameters, context: context)
-//  }
-// }
-//
-// class RouteSampleTwoViewController: UITableViewController, Routing {
-//  func setup(url: URLConvertible, queryParameters: [String : String], context: Any?) {
-//
-//  }
-//
-//  override func viewDidLoad() {
-//    super.viewDidLoad()
-//  }
-// }
+// MARK: - HomeViewController
 
-class HomeViewController: UITableViewController {
+class HomeViewController: UICollectionViewController {
   // MARK: Lifecycle
 
-  init(viewModel: HomeViewModel) {
+  init(viewModel: HomeViewModel, routeManager: RouteManager) {
     self.viewModel = viewModel
-    super.init(style: .plain)
+    self.routeManager = routeManager
+    super.init(collectionViewLayout: UICollectionViewFlowLayout())
   }
 
   @available(*, unavailable)
@@ -61,29 +43,134 @@ class HomeViewController: UITableViewController {
 
   // MARK: Internal
 
+  typealias DataSource = UICollectionViewDiffableDataSource<Category, Content>
+  typealias Snapshot = NSDiffableDataSourceSnapshot<Category, Content>
+
+  var cancellables = Set<AnyCancellable>()
+
+  let routeManager: RouteManager
+
+  @Published
   var viewModel: HomeViewModel
+
+  lazy var dataSource: DataSource = {
+    let dataSource = DataSource(
+      collectionView: collectionView,
+      cellProvider: { collectionView, indexPath, content ->
+        UICollectionViewCell? in
+        let cell = collectionView.dequeueReusableCell(
+          withReuseIdentifier: HomeViewCell.reuseIdentifier,
+          for: indexPath
+        ) as? HomeViewCell
+        cell?.content = content
+        return cell
+      }
+    )
+
+    dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
+      guard kind == UICollectionView.elementKindSectionHeader else {
+        return nil
+      }
+      let section = self.dataSource.snapshot()
+        .sectionIdentifiers[indexPath.section]
+      let view = collectionView.dequeueReusableSupplementaryView(
+        ofKind: kind,
+        withReuseIdentifier: SectionHeaderReusableView.reuseIdentifier,
+        for: indexPath
+      ) as? SectionHeaderReusableView
+      view?.titleLabel.text = section.title
+      return view
+    }
+
+    return dataSource
+  }()
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    onLoad()
+  }
 
-    tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-
+  func onLoad() {
     view.backgroundColor = .systemBackground
+    configureLayout()
+
+    $viewModel
+      .receive(on: DispatchQueue.main)
+      .sink { [weak self] currentViewModel in
+        self?.reload(viewModel: currentViewModel)
+      }
+      .store(in: &cancellables)
   }
 
-  override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    4
+  func reload(viewModel: HomeViewModel) {
+    title = viewModel.title
+
+    var snapshot = Snapshot()
+    snapshot.appendSections(viewModel.categories)
+    viewModel.categories.forEach { category in
+      snapshot.appendItems(category.contents, toSection: category)
+    }
+    dataSource.apply(snapshot, animatingDifferences: false)
   }
 
-  override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-    cell.textLabel?.text = "routes[indexPath.row].rawValue"
-    cell.accessoryType = .disclosureIndicator
-    return cell
+  // MARK: Private
+
+  private var searchController = UISearchController(searchResultsController: nil)
+}
+
+extension HomeViewController {
+  override func collectionView(
+    _ collectionView: UICollectionView,
+    didSelectItemAt indexPath: IndexPath
+  ) {
+    guard let content = dataSource.itemIdentifier(for: indexPath) else {
+      return
+    }
+
+    if let deepLink = content.link {
+      routeManager.show(for: deepLink)
+    }
+  }
+}
+
+extension HomeViewController {
+  private func configureLayout() {
+    collectionView.register(
+      SectionHeaderReusableView.self,
+      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+      withReuseIdentifier: SectionHeaderReusableView.reuseIdentifier
+    )
+    collectionView.register(HomeViewCell.self, forCellWithReuseIdentifier: HomeViewCell.reuseIdentifier)
+    collectionView.collectionViewLayout = UICollectionViewCompositionalLayout(sectionProvider: { _, _ -> NSCollectionLayoutSection? in
+      let size = NSCollectionLayoutSize(
+        widthDimension: NSCollectionLayoutDimension.fractionalWidth(1),
+        heightDimension: NSCollectionLayoutDimension.absolute(280)
+      )
+      let itemCount = 1
+      let item = NSCollectionLayoutItem(layoutSize: size)
+      let group = NSCollectionLayoutGroup.horizontal(layoutSize: size, subitem: item, count: itemCount)
+      let section = NSCollectionLayoutSection(group: group)
+      section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+      section.interGroupSpacing = 10
+      // Supplementary header view setup
+      let headerFooterSize = NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .estimated(20)
+      )
+      let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+        layoutSize: headerFooterSize,
+        elementKind: UICollectionView.elementKindSectionHeader,
+        alignment: .top
+      )
+      section.boundarySupplementaryItems = [sectionHeader]
+      return section
+    })
   }
 
-  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    tableView.deselectRow(at: indexPath, animated: true)
-    // route.show(queryParameters: ["title": "Show"])
+  override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    super.viewWillTransition(to: size, with: coordinator)
+    coordinator.animate(alongsideTransition: { _ in
+      self.collectionView.collectionViewLayout.invalidateLayout()
+    }, completion: nil)
   }
 }

@@ -1,4 +1,4 @@
-// HomeViewModel.swift
+// HomeRoute.swift
 //
 // Copyright (c) 2022 Codebase.Codes
 // Created by Theo Chen on 2022.
@@ -21,19 +21,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Combine
 import Foundation
+import RouteFoundation
 
-public class HomeViewModel: ObservableObject {
-  // MARK: Lifecycle
+public enum HomeRoute: String, Route {
+  case home
 
-  init(title: String, categories: [Category]) {
-    self.title = title
-    self.categories = categories
+  // MARK: Public
+
+  public var viewControllerProvider: RouteViewControllerProvider {
+    { arg in
+      let (_, params, _) = arg
+      let title = params["title"] ?? ""
+      return HomeComponent(title: title).viewController
+    }
   }
 
-  // MARK: Internal
-
-  @Published var title: String
-  @Published var categories: [Category]
+  @available(iOS 13, *)
+  public var viewProvider: RouteViewProvider {
+    { arg in
+      let (_, params, _) = arg
+      let title = params["title"] ?? ""
+      return HomeComponent(title: title).view
+    }
+  }
 }
